@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+        
+    Symfony\Contracts\Translation\TranslatorInterface:
+        class: Kematjaya\URLBundle\Tests\Util\Translator
+        
+    Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface:
+        class: Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator
+        
+    Symfony\Component\Security\Core\Security:
+        class: Symfony\Component\Security\Core\Security
+        
+    Symfony\Component\Routing\Generator\UrlGeneratorInterface:
+        class: Kematjaya\URLBundle\Tests\Util\UrlGenerator

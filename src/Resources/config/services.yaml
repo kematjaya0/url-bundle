@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        
+    Kematjaya\URLBundle\Twig\DeleteExtension:
+        tags: ['twig.extension']
+        
+    Kematjaya\URLBundle\Twig\UrlExtension:
+        tags: ['twig.extension']
+        
+    Kematjaya\URLBundle\Storage\CredentialStorageInterface:
+        class: Kematjaya\URLBundle\Storage\CollectionCredentialStorage
