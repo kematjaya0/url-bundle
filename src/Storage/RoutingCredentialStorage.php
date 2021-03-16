@@ -9,6 +9,7 @@ namespace Kematjaya\URLBundle\Storage;
 use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Kematjaya\URLBundle\Storage
@@ -24,31 +25,42 @@ class RoutingCredentialStorage implements CredentialStorageInterface
      */
     private $routings;
     
+    /**
+     * 
+     * @var RoutingFactoryInterface
+     */
+    private $routingFactory;
+    
     public function __construct(RoutingFactoryInterface $routingFactory, string $basePath = '/') 
     {
         $routingFactory->setBasePath($basePath);
+        $this->routingFactory = $routingFactory;
         
-        $this->routings = $routingFactory->build();
+        $this->routings = new ArrayCollection();
     }
     
     public function getAccess(string $routeName): bool 
     {
-        if (!$this->routings->offsetExists($routeName)) {
+        if (!$this->getAccesses()->offsetExists($routeName)) {
             
             return true;
         }
         
-        return $this->routings->offsetGet($routeName);
+        return $this->getAccesses()->offsetGet($routeName);
     }
 
     public function getAccesses(): Collection 
     {
+        if ($this->routings->isEmpty()) {
+            $this->routings = $this->routingFactory->build();
+        }
+        
         return $this->routings;
     }
 
     public function setAccess(string $routeName, bool $access): CredentialStorageInterface 
     {
-        $this->access->offsetSet($routeName, $access);
+        $this->getAccesses()->offsetSet($routeName, $access);
         
         return $this;
     }
