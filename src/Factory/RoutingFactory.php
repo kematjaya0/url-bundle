@@ -82,10 +82,16 @@ class RoutingFactory extends AbstractRoutingFactory
 
     public function buildInRoles():Collection
     {
+        $routes = $this->build();
         $user = $this->tokenStorage->getToken()->getUser();
+        if (!$user instanceof UserInterface) {
+
+            return $routes;
+        }
+        
         $userRoles = $user->getRoles();
         $role = end($userRoles);
-        $routes = $this->build();
+        
         foreach ($this->routingSource->getAll() as $name => $routeRoles) {
             if (!$routes->offsetExists($name)) {
                 
@@ -94,12 +100,6 @@ class RoutingFactory extends AbstractRoutingFactory
             
             if (!in_array($role, $routeRoles)) {
                 
-                continue;
-            }
-            
-            if (!$user instanceof UserInterface) {
-
-                $routes->offsetSet($name, false);
                 continue;
             }
             
