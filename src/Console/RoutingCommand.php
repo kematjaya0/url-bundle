@@ -7,6 +7,7 @@
 namespace Kematjaya\URLBundle\Console;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -50,9 +51,13 @@ class RoutingCommand extends Command
         parent::__construct($name);
     }
     
+    
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->routingFactory->setBasePath('/backend/');
+        $helper = $this->getHelper('question');
+        $path = $helper->ask($input, $output, new Question("insert base url", "/"));
+        
+        $this->routingFactory->setBasePath($path);
         $roles = $this->roleHierarchy->getReachableRoleNames([KmjUserInterface::ROLE_SUPER_USER]);
         $resultSets = [];
         foreach ($this->routingFactory->build() as $name => $credential) {
