@@ -10,8 +10,14 @@ services:
     Symfony\Component\Security\Csrf\CsrfTokenManagerInterface:
         class: Kematjaya\URLBundle\Tests\Util\CsrfTokenManager
         
+    Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface:
+        class: Kematjaya\URLBundle\Tests\Util\TokenStorage
+        
     Symfony\Component\Security\Core\Security:
         class: Symfony\Component\Security\Core\Security
         
     Symfony\Component\Routing\Generator\UrlGeneratorInterface:
         class: Kematjaya\URLBundle\Tests\Util\UrlGenerator
+        
+    Symfony\Component\Routing\RouterInterface:
+        class: Kematjaya\URLBundle\Tests\Util\Router

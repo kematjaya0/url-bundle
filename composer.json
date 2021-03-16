@@ -34,6 +34,7 @@
         "symfony/security-core": "^4.0|^5.0",
         "symfony/twig-bundle": "^4.0|^5.0",
         "doctrine/collections": "^1.6",
-        "symfony/yaml": "^4.0|^5.0"
+        "symfony/yaml": "^4.0|^5.0",
+        "symfony/routing": "^4.0|^5.0"
     }
 }

@@ -11,4 +11,10 @@ services:
         tags: ['twig.extension']
         
     Kematjaya\URLBundle\Storage\CredentialStorageInterface:
-        class: Kematjaya\URLBundle\Storage\CollectionCredentialStorage
+        class: Kematjaya\URLBundle\Storage\RoutingCredentialStorage
+        
+    Kematjaya\URLBundle\Factory\RoutingFactoryInterface:
+        class: Kematjaya\URLBundle\Factory\RoutingFactory
+        
+    Kematjaya\URLBundle\Source\RoutingSourceInterface:
+        class: Kematjaya\URLBundle\Source\YamlRoutingSource
