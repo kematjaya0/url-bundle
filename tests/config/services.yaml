@@ -21,3 +21,6 @@ services:
         
     Symfony\Component\Routing\RouterInterface:
         class: Kematjaya\URLBundle\Tests\Util\Router
+        
+    Symfony\Component\Security\Core\Role\RoleHierarchyInterface:
+        class: Kematjaya\URLBundle\Tests\Util\RoleHierarchy

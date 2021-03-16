@@ -64,26 +64,28 @@ class RoutingFactory extends AbstractRoutingFactory
                 continue;
             }
             
+            if (null === $this->getBasePath()) {
+                continue;
+            }
+            
             $pos = strpos($route->getPath(), $this->getBasePath());
             if (false === $pos) {
                 
-                $routes->offsetSet($name, true);
                 continue;
             }
-            
-            $user = $this->tokenStorage->getToken()->getUser();
-            if (!$user instanceof UserInterface) {
-
-                $routes->offsetSet($name, false);
-                continue;
-            }
-            
             
             $routes->offsetSet($name, false);
         }
         
+        return $routes;
+    }
+
+    public function buildInRoles():Collection
+    {
+        $user = $this->tokenStorage->getToken()->getUser();
         $userRoles = $user->getRoles();
         $role = end($userRoles);
+        $routes = $this->build();
         foreach ($this->routingSource->getAll() as $name => $routeRoles) {
             if (!$routes->offsetExists($name)) {
                 
@@ -95,10 +97,15 @@ class RoutingFactory extends AbstractRoutingFactory
                 continue;
             }
             
+            if (!$user instanceof UserInterface) {
+
+                $routes->offsetSet($name, false);
+                continue;
+            }
+            
             $routes->offsetSet($name, true);
         }
         
         return $routes;
     }
-
 }

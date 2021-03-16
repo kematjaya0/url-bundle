@@ -40,4 +40,10 @@ interface RoutingFactoryInterface
      */
     public function getBasePath():?string;
     
+    /**
+     * 
+     * @return Collection
+     */
+    public function buildInRoles():Collection;
+    
 }

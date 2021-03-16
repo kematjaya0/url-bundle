@@ -18,3 +18,8 @@ services:
         
     Kematjaya\URLBundle\Source\RoutingSourceInterface:
         class: Kematjaya\URLBundle\Source\YamlRoutingSource
+        
+    Kematjaya\URLBundle\Console\RoutingCommand:
+        class: Kematjaya\URLBundle\Console\RoutingCommand
+        tags:
+            -  { name: console.command }

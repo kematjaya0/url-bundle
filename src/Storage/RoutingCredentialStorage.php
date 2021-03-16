@@ -52,7 +52,7 @@ class RoutingCredentialStorage implements CredentialStorageInterface
     public function getAccesses(): Collection 
     {
         if ($this->routings->isEmpty()) {
-            $this->routings = $this->routingFactory->build();
+            $this->routings = $this->routingFactory->buildInRoles();
         }
         
         return $this->routings;

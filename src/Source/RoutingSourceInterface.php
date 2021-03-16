@@ -14,4 +14,6 @@ namespace Kematjaya\URLBundle\Source;
 interface RoutingSourceInterface 
 {
     public function getAll():array;
+    
+    public function dump(array $routers):void;
 }

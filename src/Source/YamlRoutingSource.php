@@ -9,6 +9,7 @@ namespace Kematjaya\URLBundle\Source;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Exception;
 
 /**
  * @package Kematjaya\URLBundle\Source
@@ -22,25 +23,41 @@ class YamlRoutingSource implements RoutingSourceInterface
      * 
      * @var string
      */
-    private $basePath;
+    private $filePath;
     
     public function __construct(ParameterBagInterface $bag) 
     {
-        $this->basePath = $bag->get('kernel.project_dir');
+        $basePath = $bag->get('kernel.project_dir');
+        $this->filePath = $basePath . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'url.yaml';
     }
     
     public function getAll(): array 
     {
         $filesystem = new Filesystem();
-        $filePath = $this->basePath . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'url.yaml';
-        if (!$filesystem->exists($filePath)) {
-            
-            $filesystem->dumpFile($filePath, '');
+        if (!$filesystem->exists($this->filePath)) {
+            $this->dump([]);
         }
         
-        $menus = Yaml::parseFile($filePath);
+        $menus = Yaml::parseFile($this->filePath);
         
         return null !== $menus ? $menus : [];
+    }
+    
+    /**
+     * 
+     * @param array $routers
+     * @return void
+     * @throws Exception
+     */
+    public function dump(array $routers):void
+    {
+        try {
+            $string = Yaml::dump($routers);
+            $filesystem = new Filesystem();
+            $filesystem->dumpFile($this->filePath, $string);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
     }
 
 }
