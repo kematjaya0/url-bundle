@@ -23,3 +23,6 @@ services:
         class: Kematjaya\URLBundle\Console\RoutingCommand
         tags:
             -  { name: console.command }
+            
+    Kematjaya\URLBundle\Type\AccessControlType: ~
+    Kematjaya\URLBundle\Type\ControlType: ~
