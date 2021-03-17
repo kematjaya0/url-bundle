@@ -9,12 +9,11 @@ namespace Kematjaya\URLBundle\Type;
 use Kematjaya\URLBundle\Type\ControlType;
 use Kematjaya\URLBundle\Source\RoutingSourceInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @package Kematjaya\URLBundle\Type
@@ -29,16 +28,10 @@ class AccessControlType extends AbstractType implements DataTransformerInterface
      */
     private $routingSource;
     
-    /**
-     * 
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
     
-    public function __construct(TokenStorageInterface $tokenStorage, RoutingSourceInterface $routingSource) 
+    public function __construct(RoutingSourceInterface $routingSource) 
     {
         $this->routingSource = $routingSource;
-        $this->tokenStorage = $tokenStorage;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -51,6 +44,9 @@ class AccessControlType extends AbstractType implements DataTransformerInterface
             }
             
             $builder
+                ->add('role', HiddenType::class, [
+                    'data' => $options['role']
+                ])
                 ->add($name, CollectionType::class, [
                     'entry_type' => ControlType::class,
                     'data' => [$name => $data],
@@ -63,12 +59,6 @@ class AccessControlType extends AbstractType implements DataTransformerInterface
     
     protected function getGroupedRouters(string $role):array
     {
-        $user = $this->tokenStorage->getToken()->getUser();
-        if (!$user instanceof UserInterface) {
-            
-            throw new \Exception(sprintf("this form required logged user"));
-        }
-        
         $routers = $this->routingSource->getAll();
         $groups = array_filter($routers, function ($row) {
             
@@ -93,16 +83,14 @@ class AccessControlType extends AbstractType implements DataTransformerInterface
 
     public function reverseTransform($value) 
     {
-        $user = $this->tokenStorage->getToken()->getUser();
-        if (!$user instanceof UserInterface) {
-            
-            throw new \Exception(sprintf("this form required logged user"));
-        }
-        
-        $roles = $user->getRoles();
-        $role = array_pop($roles);
+        $role = $value['role'];
         $routers = $this->routingSource->getAll();
-        foreach ($value as $val) {
+        foreach ($value as $x => $val) {
+            if ('role' === $x) {
+                
+                continue;
+            }
+            
             foreach ($val as $creds) {
                 foreach ($creds as $route => $credential) {
                     if ($credential) {
