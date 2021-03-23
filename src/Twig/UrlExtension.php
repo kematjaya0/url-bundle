@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the helpdesk.
+ * This file is part of the url-bundle.
  */
 
 namespace Kematjaya\URLBundle\Twig;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Minwork\Helper\Arr;
 
 /**
- * @package App\URLBundle\Twig
+ * @package Kematjaya\URLBundle\Twig
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */

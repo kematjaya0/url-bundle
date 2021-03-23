@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the helpdesk.
+ * This file is part of the url-bundle.
  */
 
 namespace Kematjaya\URLBundle\Twig;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @package App\URLBundle\Twig
+ * @package Kematjaya\URLBundle\Twig
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
@@ -62,7 +62,7 @@ class DeleteExtension extends UrlExtension
         }
         
         $url = $this->getUrlGenerator()->generate($routeName, $routeParameters, $relative ? UrlGeneratorInterface::RELATIVE_PATH : UrlGeneratorInterface::ABSOLUTE_PATH);
-        return sprintf('<form method="post" action="%s" onsubmit="return confirm(\'%s\');">
+        return sprintf('<form method="post" style="display: inline;" action="%s" onsubmit="return confirm(\'%s\');">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="%s">
                     %s 
