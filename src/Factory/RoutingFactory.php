@@ -12,7 +12,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Kematjaya\UserBundle\Entity\DefaultUser;
 
 /**
  * @package Kematjaya\URLBundle\Factory
@@ -65,6 +65,7 @@ class RoutingFactory extends AbstractRoutingFactory
             }
             
             if (null === $this->getBasePath()) {
+                $routes->offsetSet($name, false);
                 continue;
             }
             
@@ -84,26 +85,20 @@ class RoutingFactory extends AbstractRoutingFactory
     {
         $routes = $this->build();
         $user = $this->tokenStorage->getToken()->getUser();
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof DefaultUser) {
 
             return $routes;
         }
         
-        $userRoles = $user->getRoles();
-        $role = end($userRoles);
-        
-        foreach ($this->routingSource->getAll() as $name => $routeRoles) {
-            if (!$routes->offsetExists($name)) {
-                
+        $role = $user->getSingleRole();
+        $settings = $this->routingSource->getAll();
+        foreach ($routes as $name => $access) {
+            if (!isset($settings[$name])) {
+                $routes->offsetSet($name, true);
                 continue;
             }
             
-            if (!in_array($role, $routeRoles)) {
-                
-                continue;
-            }
-            
-            $routes->offsetSet($name, true);
+            $routes->offsetSet($name, in_array($role, $settings[$name]));
         }
         
         return $routes;
