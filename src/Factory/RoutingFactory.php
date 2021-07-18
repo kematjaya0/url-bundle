@@ -84,23 +84,43 @@ class RoutingFactory extends AbstractRoutingFactory
     public function buildInRoles():Collection
     {
         $routes = $this->build();
-        $user = $this->tokenStorage->getToken()->getUser();
+        $settings = $this->routingSource->getAll();
+        $token = $this->tokenStorage->getToken();
+        if (null === $token) {
+            
+            return $this->updateRole($routes, $settings);
+        }
+        
+        $user = $token->getUser();
         if (!$user instanceof DefaultUser) {
-
-            return $routes;
+            
+            return $this->updateRole($routes, $settings);
         }
         
         $role = $user->getSingleRole();
-        $settings = $this->routingSource->getAll();
+        $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
+            
+            $routes->offsetSet($routeName, in_array($role, $settings[$routeName]));
+        });
+        
+        return $routes;
+    }
+    
+    protected function updateRole(Collection &$routes, array $settings, callable $callable = null)
+    {
         foreach ($routes as $name => $access) {
             if (!isset($settings[$name])) {
                 $routes->offsetSet($name, true);
                 continue;
-            }
+            } 
             
-            $routes->offsetSet($name, in_array($role, $settings[$name]));
+            if (null !== $callable) {
+
+                call_user_func($callable, $routes, $name);
+            }
         }
         
+            
         return $routes;
     }
 }
