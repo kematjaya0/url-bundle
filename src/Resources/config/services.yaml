@@ -19,10 +19,16 @@ services:
     Kematjaya\URLBundle\Source\RoutingSourceInterface:
         class: Kematjaya\URLBundle\Source\YamlRoutingSource
         
+    Kematjaya\URLBundle\Transformer\AccessControlTransformer:
+        class: Kematjaya\URLBundle\Transformer\AccessControlTransformer
+        
     Kematjaya\URLBundle\Console\RoutingCommand:
         class: Kematjaya\URLBundle\Console\RoutingCommand
         tags:
             -  { name: console.command }
             
+    Kematjaya\URLBundle\Repository\URLRepositoryInterface:
+        class: Kematjaya\URLBundle\Repository\URLRepository
+        
     Kematjaya\URLBundle\Type\AccessControlType: ~
     Kematjaya\URLBundle\Type\ControlType: ~
