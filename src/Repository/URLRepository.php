@@ -37,7 +37,7 @@ class URLRepository implements URLRepositoryInterface
     }
     
     public function save(array $routers):void
-    {dump($routers);exit;
+    {
         $this->routingSource->dump($routers);
     }
     
