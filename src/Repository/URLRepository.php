@@ -37,7 +37,7 @@ class URLRepository implements URLRepositoryInterface
     }
     
     public function save(array $routers):void
-    {
+    {dump($routers);exit;
         $this->routingSource->dump($routers);
     }
     
@@ -60,20 +60,73 @@ class URLRepository implements URLRepositoryInterface
         $values = [];
         foreach ($groups as $k => $group) {
             $name = str_replace("_index", '', $k);
-            $values[$name] = array_filter($routers, function ($key) use ($k, $name, $groups) {
-                
-                if ($key === $k) {
-                    return false;
+            $values[$name] = $this->checkRole(
+                $this->filtering($k, $routers), 
+                $role
+            );
+        }
+        
+        $containtOther = $this->findContainingOthers($values);
+        foreach ($containtOther as $k => $containt) {
+            foreach ($values as $routeName => $val) {
+                if ($k === $routeName) {
+                    continue;
                 }
                 
-                return (preg_match("/^" . $name . "/i", $key));
-            }, ARRAY_FILTER_USE_KEY);
-            
-            foreach ($values[$name] as $n => $roles) {
-                $values[$name][$n] = in_array($role, $roles);
+                $similiar = array_intersect_key($val, $containt);
+                if (empty($similiar)) {
+                    continue;
+                }
+                
+                // remove similiar keys
+                $similiar[$routeName . '_index'] = true;
+                foreach ($similiar as $name => $v) {
+                    if (!isset($values[$k][$name])) {
+                        continue;
+                    }
+                    
+                    unset($values[$k][$name]);
+                }
             }
         }
         
         return $values;
+    }
+    
+    protected function findContainingOthers(array $routers):array
+    {
+        return array_filter($routers, function ($value) {
+            foreach ($value as $routeName => $v) {
+                if (preg_match("/index\z/i", $routeName)) {
+                    
+                    return true;
+                }
+            }
+            
+            return false;
+        });
+    }
+    
+    protected function filtering(string $k, array $routers):array
+    {
+        $name = str_replace("_index", '', $k);
+        return array_filter($routers, function ($key) use ($k, $name) {
+
+            if ($key === $k) {
+                return false;
+            }
+
+            return (preg_match("/^" . $name . "/i", $key));
+        }, ARRAY_FILTER_USE_KEY);
+    }
+    
+    protected function checkRole(array $values, string $role):array
+    {
+        $results = [];
+        foreach ($values as $n => $roles) {
+            $results[$n] = in_array($role, $roles);
+        }
+        
+        return $results;
     }
 }
