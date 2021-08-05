@@ -12,6 +12,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Kematjaya\UserBundle\Entity\DefaultUser;
 
 /**
@@ -92,12 +93,17 @@ class RoutingFactory extends AbstractRoutingFactory
         }
         
         $user = $token->getUser();
-        if (!$user instanceof DefaultUser) {
+        if (!$user instanceof UserInterface) {
             
             return $this->updateRole($routes, $settings);
         }
         
-        $role = $user->getSingleRole();
+        $roles = $user->getRoles();
+        $role = end($roles);
+        if ($user instanceof DefaultUser) {
+            $role = $user->getSingleRole();
+        }
+        
         $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
             
             $routes->offsetSet($routeName, in_array($role, $settings[$routeName]));
