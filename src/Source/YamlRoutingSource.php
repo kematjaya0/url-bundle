@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the url-bundle.
+ * This file is part of the kematjaya/url-bundle.
  */
 
 namespace Kematjaya\URLBundle\Source;
@@ -31,14 +31,19 @@ class YamlRoutingSource implements RoutingSourceInterface
         $this->filePath = $basePath . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'url.yaml';
     }
     
+    public function getPath():string
+    {
+        return $this->filePath;
+    }
+    
     public function getAll(): array 
     {
         $filesystem = new Filesystem();
-        if (!$filesystem->exists($this->filePath)) {
+        if (!$filesystem->exists($this->getPath())) {
             $this->dump([]);
         }
         
-        $menus = Yaml::parseFile($this->filePath);
+        $menus = Yaml::parseFile($this->getPath());
         
         return null !== $menus ? $menus : [];
     }
@@ -49,15 +54,29 @@ class YamlRoutingSource implements RoutingSourceInterface
      * @return void
      * @throws Exception
      */
-    public function dump(array $routers):void
+    public function dump(array $routers):int
     {
+        
+        $existing = $this->getAll();
         try {
-            $string = Yaml::dump($routers);
+            foreach (array_keys($existing) as $key) {
+                if (isset($routers[$key])) {
+                    unset($routers[$key]);
+                }
+            }
+            
+            $paths = array_merge($existing, $routers);
+            
+            $string = Yaml::dump($paths);
             $filesystem = new Filesystem();
-            $filesystem->dumpFile($this->filePath, $string);
+            $filesystem->dumpFile($this->getPath(), $string);
+            
+            return count($routers);
         } catch (Exception $ex) {
             throw $ex;
         }
+        
+        return 0;
     }
 
 }

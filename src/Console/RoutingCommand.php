@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the url-bundle.
+ * This file is part of the kematjaya/url-bundle.
  */
 
 namespace Kematjaya\URLBundle\Console;
@@ -10,13 +10,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
 use Kematjaya\URLBundle\Source\RoutingSourceInterface;
 use Kematjaya\UserBundle\Entity\KmjUserInterface;
 
 /**
- * @package App\Console
+ * @package Kematjaya\URLBundle\Console
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
@@ -54,19 +55,30 @@ class RoutingCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $helper = $this->getHelper('question');
-        $path = $helper->ask($input, $output, new Question("insert base url", "/"));
+        $io = new SymfonyStyle($input, $output);
+        $io->title("Collect route path");
         
+        $path = $io->askQuestion(new Question("insert base url", "/"));
         $this->routingFactory->setBasePath($path);
         $roles = $this->roleHierarchy->getReachableRoleNames([KmjUserInterface::ROLE_SUPER_USER]);
+        
         $resultSets = [];
         foreach ($this->routingFactory->build() as $name => $credential) {
             $resultSets[$name] = $roles;
         }
         
-        $this->routingSource->dump($resultSets);
-        $output->writeln(sprintf("write %s rows success", count($resultSets)));
+        try {
+            $updated = $this->routingSource->dump($resultSets);
+        } catch (\Exception $ex) {
+            $io->error($ex->getMessage());
+            
+            return self::FAILURE;
+        }
         
-        return Command::SUCCESS;
+        $io->success(
+            sprintf("success update %s route in file: %s", $updated, $this->routingSource->getPath())
+        );
+        
+        return self::SUCCESS;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the url-bundle.
+ * This file is part of the kematjaya/url-bundle.
  */
 
 namespace Kematjaya\URLBundle\Source;
@@ -13,7 +13,24 @@ namespace Kematjaya\URLBundle\Source;
  */
 interface RoutingSourceInterface 
 {
+    
+    /**
+     * get storage path
+     * 
+     * @return string
+     */
+    public function getPath():string;
+    
+    /**
+     * get all route path available
+     * @return array
+     */
     public function getAll():array;
     
-    public function dump(array $routers):void;
+    /**
+     * dump array route path to storage
+     * @param array $routers
+     * @return int row updated
+     */
+    public function dump(array $routers):int;
 }
