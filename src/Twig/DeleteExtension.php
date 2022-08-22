@@ -40,7 +40,7 @@ class DeleteExtension extends UrlExtension
         parent::__construct($security, $urlGenerator, $credentialStorage);
     }
     
-    public function getFunctions()
+    public function getFunctions():array
     {
         return [
             new TwigFunction('delete_tag', [$this, 'deleteTag'], ['is_safe' => ['html']])

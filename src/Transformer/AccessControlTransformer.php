@@ -28,6 +28,11 @@ class AccessControlTransformer implements DataTransformerInterface
         $this->routingSource = $routingSource;
     }
     
+    /**
+     * 
+     * @param type $value
+     * @return mixed
+     */
     public function reverseTransform($value) 
     {
         $role = $value['role'];
@@ -61,6 +66,11 @@ class AccessControlTransformer implements DataTransformerInterface
         return $routers;
     }
 
+    /**
+     * 
+     * @param type $value
+     * @return mixed
+     */
     public function transform($value) 
     {
         
