@@ -40,7 +40,8 @@ class YamlRoutingSource implements RoutingSourceInterface
     {
         $filesystem = new Filesystem();
         if (!$filesystem->exists($this->getPath())) {
-            $this->dump([]);
+            $string = Yaml::dump([]);
+            $filesystem->dumpFile($this->getPath(), $string);
         }
         
         $menus = Yaml::parseFile($this->getPath());
