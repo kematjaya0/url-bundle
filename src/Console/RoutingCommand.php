@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the kematjaya/url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -63,7 +59,7 @@ class RoutingCommand extends Command
         $roles = $this->roleHierarchy->getReachableRoleNames([KmjUserInterface::ROLE_SUPER_USER]);
         
         $resultSets = [];
-        foreach ($this->routingFactory->build() as $name => $credential) {
+        foreach ($this->routingFactory->build()->getKeys() as $name) {
             $resultSets[$name] = $roles;
         }
         
