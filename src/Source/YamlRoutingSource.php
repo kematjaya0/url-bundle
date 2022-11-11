@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the kematjaya/url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Source;
 
 use Symfony\Component\Yaml\Yaml;
@@ -57,18 +53,17 @@ class YamlRoutingSource implements RoutingSourceInterface
      */
     public function dump(array $routers):int
     {
-        
         $existing = $this->getAll();
         try {
             foreach (array_keys($existing) as $key) {
                 if (isset($routers[$key])) {
-                    unset($routers[$key]);
+                    unset($existing[$key]);
                 }
             }
             
-            $paths = array_merge($existing, $routers);
+            $updateRouters = array_merge($existing, $routers);
             
-            $string = Yaml::dump($paths);
+            $string = Yaml::dump($updateRouters);
             $filesystem = new Filesystem();
             $filesystem->dumpFile($this->getPath(), $string);
             
