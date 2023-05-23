@@ -20,61 +20,48 @@ use Kematjaya\UserBundle\Entity\KmjUserInterface;
 class RoutingCommand extends Command
 {
     protected static $defaultName = 'url:configure';
-    
-    /**
-     * 
-     * @var RoutingFactoryInterface
-     */
-    private $routingFactory;
-    
-    /**
-     * 
-     * @var RoleHierarchyInterface
-     */
-    private $roleHierarchy;
-    
-    /**
-     * 
-     * @var RoutingSourceInterface
-     */
-    private $routingSource;
-    
-    public function __construct(RoutingSourceInterface $routingSource, RoutingFactoryInterface $routingFactory, RoleHierarchyInterface $roleHierarchy, mixed $name = null) 
+
+    private RoutingFactoryInterface $routingFactory;
+
+    private RoleHierarchyInterface $roleHierarchy;
+
+    private RoutingSourceInterface $routingSource;
+
+    public function __construct(RoutingSourceInterface $routingSource, RoutingFactoryInterface $routingFactory, RoleHierarchyInterface $roleHierarchy, mixed $name = null)
     {
         $this->routingFactory = $routingFactory;
         $this->roleHierarchy = $roleHierarchy;
         $this->routingSource = $routingSource;
-        
+
         parent::__construct($name);
     }
-    
-    
+
+
     protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title("Collect route path");
-        
+
         $path = $io->askQuestion(new Question("insert base url", "/"));
         $this->routingFactory->setBasePath($path);
         $roles = $this->roleHierarchy->getReachableRoleNames([KmjUserInterface::ROLE_SUPER_USER]);
-        
         $resultSets = [];
         foreach ($this->routingFactory->build()->getKeys() as $name) {
             $resultSets[$name] = $roles;
         }
-        
+
         try {
             $updated = $this->routingSource->dump($resultSets);
         } catch (\Exception $ex) {
             $io->error($ex->getMessage());
-            
+
             return self::FAILURE;
         }
-        
+
         $io->success(
             sprintf("success update %s route in file: %s", $updated, $this->routingSource->getPath())
         );
-        
+
         return self::SUCCESS;
     }
 }

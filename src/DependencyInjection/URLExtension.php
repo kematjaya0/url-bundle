@@ -17,6 +17,10 @@ class URLExtension extends Extension
         $locator = new FileLocator(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resources/config');
         $loader = new YamlFileLoader($container, $locator);
         $loader->load('services.yaml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+        $container->setParameter($this->getAlias(), $config);
     }
 
 }
