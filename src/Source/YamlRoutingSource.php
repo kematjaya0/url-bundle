@@ -2,6 +2,7 @@
 
 namespace Kematjaya\URLBundle\Source;
 
+use Kematjaya\UserBundle\Entity\KmjUserInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -58,12 +59,19 @@ class YamlRoutingSource implements RoutingSourceInterface
         try {
             foreach (array_keys($existing) as $key) {
                 $existing[$key] = array_values($existing[$key]);
-                if (isset($routers[$key])) {
-                    unset($routers[$key]);
+                if (!isset($routers[$key])) {
+                    $routers[$key] = $existing[$key];
                 }
             }
 
-            $updateRouters = array_merge($existing, $routers);
+            $updateRouters = array_map(function (array $roles) {
+                $key = array_search(KmjUserInterface::ROLE_USER, $roles);
+                if (false !== $key) {
+                    unset($roles[$key]);
+                }
+
+                return array_values($roles);
+            }, array_merge($existing, $routers));
 
             $string = Yaml::dump($updateRouters);
             $filesystem = new Filesystem();
