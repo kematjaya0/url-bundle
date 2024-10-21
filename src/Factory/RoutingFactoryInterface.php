@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Factory;
 
 use Doctrine\Common\Collections\Collection;

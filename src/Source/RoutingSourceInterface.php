@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the kematjaya/url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Source;
 
 /**

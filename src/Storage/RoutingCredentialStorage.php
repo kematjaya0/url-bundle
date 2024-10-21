@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Storage;
 
 use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
@@ -11,25 +7,11 @@ use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * @package Kematjaya\URLBundle\Storage
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class RoutingCredentialStorage implements CredentialStorageInterface
 {
-    
-    /**
-     * 
-     * @var Collection
-     */
-    private $routings;
-    
-    /**
-     * 
-     * @var RoutingFactoryInterface
-     */
-    private $routingFactory;
+    private Collection $routings;
+
+    private RoutingFactoryInterface $routingFactory;
     
     public function __construct(RoutingFactoryInterface $routingFactory, string $basePath = '/') 
     {

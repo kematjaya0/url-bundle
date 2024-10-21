@@ -7,37 +7,18 @@
 namespace Kematjaya\URLBundle\Twig;
 
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Minwork\Helper\Arr;
 
-/**
- * @package Kematjaya\URLBundle\Twig
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class UrlExtension extends AbstractExtension
 {
+    private UrlGeneratorInterface $urlGenerator;
     
-    /**
-     * 
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-    
-    /**
-     * 
-     * @var CredentialStorageInterface
-     */
-    private $credentialStorage;
-    
-    /**
-     * 
-     * @var Security
-     */
-    private $security;
+    private CredentialStorageInterface $credentialStorage;
+    private Security $security;
     
     const KEY_ICON = 'icon';
     const KEY_LABEL= 'label';

@@ -10,24 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * @package Kematjaya\URLBundle\Type
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class AccessControlType extends AbstractType
 {
-    /**
-     *
-     * @var URLRepositoryInterface
-     */
-    private $URLRepository;
-
-    /**
-     *
-     * @var AccessControlTransformer
-     */
-    private $accessControlTransformer;
+    private URLRepositoryInterface $URLRepository;
+    private AccessControlTransformer $accessControlTransformer;
 
     public function __construct(AccessControlTransformer $accessControlTransformer, URLRepositoryInterface $URLRepository)
     {

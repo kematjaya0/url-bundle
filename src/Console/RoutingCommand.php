@@ -2,6 +2,7 @@
 
 namespace Kematjaya\URLBundle\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,23 +11,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
 use Kematjaya\URLBundle\Source\RoutingSourceInterface;
-use Kematjaya\UserBundle\Entity\KmjUserInterface;
 
 /**
  * @package Kematjaya\URLBundle\Console
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
+#[AsCommand(name: 'url:configure')]
 class RoutingCommand extends Command
 {
-    protected static $defaultName = 'url:configure';
-
     private RoutingFactoryInterface $routingFactory;
-
     private RoleHierarchyInterface $roleHierarchy;
-
     private RoutingSourceInterface $routingSource;
-
     public function __construct(RoutingSourceInterface $routingSource, RoutingFactoryInterface $routingFactory, RoleHierarchyInterface $roleHierarchy, mixed $name = null)
     {
         $this->routingFactory = $routingFactory;

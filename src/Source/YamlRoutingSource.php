@@ -14,12 +14,7 @@ use Exception;
  */
 class YamlRoutingSource implements RoutingSourceInterface
 {
-
-    /**
-     *
-     * @var string
-     */
-    private $filePath;
+    private string $filePath;
 
     public function __construct(ParameterBagInterface $bag)
     {

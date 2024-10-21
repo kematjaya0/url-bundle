@@ -7,33 +7,18 @@
 namespace Kematjaya\URLBundle\Twig;
 
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\TwigFunction;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @package Kematjaya\URLBundle\Twig
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class DeleteExtension extends UrlExtension
 {
+    private CsrfTokenManagerInterface $tokenGenerator;
+    private TranslatorInterface $translator;
     
-    /**
-     * 
-     * @var TokenGeneratorInterface
-     */
-    private $tokenGenerator;
-    
-    /**
-     * 
-     * @var TranslatorInterface
-     */
-    private $translator;
-    
-    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
+    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage)
     {
         $this->tokenGenerator = $tokenGenerator;
         $this->translator = $translator;

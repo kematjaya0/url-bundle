@@ -12,11 +12,7 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class AccessControlTransformer implements DataTransformerInterface
 {
-    /**
-     * 
-     * @var RoutingSourceInterface
-     */
-    private $routingSource;
+    private RoutingSourceInterface $routingSource;
     
     public function __construct(RoutingSourceInterface $routingSource) 
     {

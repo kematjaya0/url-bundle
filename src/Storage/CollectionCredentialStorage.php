@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the helpdesk.
- */
-
 namespace Kematjaya\URLBundle\Storage;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,12 +12,7 @@ use Doctrine\Common\Collections\Collection;
  */
 class CollectionCredentialStorage implements CredentialStorageInterface
 {
-    
-    /**
-     * 
-     * @var Collection
-     */
-    private $access;
+    private Collection $access;
     
     public function __construct() 
     {

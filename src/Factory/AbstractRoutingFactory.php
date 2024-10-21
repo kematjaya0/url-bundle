@@ -1,9 +1,4 @@
 <?php
-
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Factory;
 
 /**
@@ -13,12 +8,7 @@ namespace Kematjaya\URLBundle\Factory;
  */
 abstract class AbstractRoutingFactory implements RoutingFactoryInterface 
 {
-    
-    /**
-     * 
-     * @var string
-     */
-    private $basePath;
+    private string $basePath;
     
     public function setBasePath(string $basePath): RoutingFactoryInterface
     {
