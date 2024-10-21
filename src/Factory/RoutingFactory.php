@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Kematjaya\UserBundle\Entity\DefaultUser;
 
 /**
  * @package Kematjaya\URLBundle\Factory
@@ -94,9 +93,6 @@ class RoutingFactory extends AbstractRoutingFactory
 
         $roles = $user->getRoles();
         $role = end($roles);
-        if ($user instanceof DefaultUser) {
-            $role = $user->getSingleRole();
-        }
 
         $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
 

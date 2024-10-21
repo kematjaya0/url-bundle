@@ -44,7 +44,7 @@ class RoutingCommand extends Command
 
         $path = $io->askQuestion(new Question("insert base url", "/"));
         $this->routingFactory->setBasePath($path);
-        $roles = $this->roleHierarchy->getReachableRoleNames([KmjUserInterface::ROLE_SUPER_USER]);
+        $roles = $this->roleHierarchy->getReachableRoleNames(["ROLE_SUPER_USER"]);
         $resultSets = [];
         foreach ($this->routingFactory->build()->getKeys() as $name) {
             $resultSets[$name] = $roles;
