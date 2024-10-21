@@ -28,7 +28,7 @@ class AccessControlTransformer implements DataTransformerInterface
      * @param type $value
      * @return mixed
      */
-    public function reverseTransform($value) 
+    public function reverseTransform(mixed $value):mixed
     {
         $role = $value['role'];
         unset($value['role']);
@@ -47,7 +47,7 @@ class AccessControlTransformer implements DataTransformerInterface
      * @param type $value
      * @return mixed
      */
-    public function transform($value) 
+    public function transform(mixed $value) :mixed
     {
         return $value;
     }
