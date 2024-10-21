@@ -18,13 +18,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RoutingFactory extends AbstractRoutingFactory
 {
-
     private RouterInterface $router;
-
     private TokenStorageInterface $tokenStorage;
-
     private RoutingSourceInterface $routingSource;
-
     private array $configs;
 
     public function __construct(ParameterBagInterface $bag, RouterInterface $router, TokenStorageInterface $tokenStorage, RoutingSourceInterface $routingSource)
@@ -33,6 +29,7 @@ class RoutingFactory extends AbstractRoutingFactory
         $this->router = $router;
         $this->tokenStorage = $tokenStorage;
         $this->routingSource = $routingSource;
+        $this->setBasePath("/");
     }
 
     public function getRouter(): RouterInterface
