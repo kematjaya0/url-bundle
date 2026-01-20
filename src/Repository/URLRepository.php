@@ -11,16 +11,10 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class URLRepository implements URLRepositoryInterface
 {
-    /**
-     *
-     * @var RoutingSourceInterface
-     */
-    private $routingSource;
 
 
-    public function __construct(RoutingSourceInterface $routingSource)
+    public function __construct(private RoutingSourceInterface $routingSource)
     {
-        $this->routingSource = $routingSource;
     }
 
     public function findAll(string $role):array

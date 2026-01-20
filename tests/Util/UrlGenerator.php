@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Tests\Util;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -28,7 +24,7 @@ class UrlGenerator implements UrlGeneratorInterface
         return $this->context;
     }
 
-    public function setContext(RequestContext $context) 
+    public function setContext(RequestContext $context) :void
     {
         $this->context = $context;
     }

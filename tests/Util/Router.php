@@ -1,12 +1,9 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Tests\Util;
 
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -33,9 +30,9 @@ class Router implements RouterInterface
         return $this->context;
     }
 
-    public function getRouteCollection(): \Symfony\Component\Routing\RouteCollection 
+    public function getRouteCollection(): RouteCollection
     {
-        return new \Symfony\Component\Routing\RouteCollection();
+        return new RouteCollection();
     }
 
     public function match(string $pathinfo): array 
@@ -43,7 +40,7 @@ class Router implements RouterInterface
         return [];
     }
 
-    public function setContext(RequestContext $context) 
+    public function setContext(RequestContext $context) :void
     {
         $this->context = $context;
     }

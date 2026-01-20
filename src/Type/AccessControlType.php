@@ -12,16 +12,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class AccessControlType extends AbstractType
 {
-    private URLRepositoryInterface $URLRepository;
-    private AccessControlTransformer $accessControlTransformer;
-
-    public function __construct(AccessControlTransformer $accessControlTransformer, URLRepositoryInterface $URLRepository)
+    public function __construct(private AccessControlTransformer $accessControlTransformer, private URLRepositoryInterface $URLRepository)
     {
-        $this->URLRepository = $URLRepository;
-        $this->accessControlTransformer = $accessControlTransformer;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options):void
     {
         $routers = $this->URLRepository->findAll($options['role']);
         $builder->add('role', HiddenType::class, [
@@ -44,7 +39,7 @@ class AccessControlType extends AbstractType
         $builder->addModelTransformer($this->accessControlTransformer);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver):void
     {
         $resolver->setRequired('role');
     }

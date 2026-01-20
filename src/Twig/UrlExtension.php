@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Twig;
 
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
@@ -15,21 +11,13 @@ use Minwork\Helper\Arr;
 
 class UrlExtension extends AbstractExtension
 {
-    private UrlGeneratorInterface $urlGenerator;
-    
-    private CredentialStorageInterface $credentialStorage;
-    private Security $security;
-    
     const KEY_ICON = 'icon';
     const KEY_LABEL= 'label';
     const KEY_ACTION = 'action';
     const KEY_OBJECT = 'object';
     
-    public function __construct(Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
+    public function __construct(private Security $security, private UrlGeneratorInterface $urlGenerator, private CredentialStorageInterface $credentialStorage)
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->credentialStorage = $credentialStorage;
-        $this->security = $security;
     }
     
     public function getFunctions():array

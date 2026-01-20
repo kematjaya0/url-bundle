@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Tests\Util;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -18,16 +14,14 @@ class TokenStorage implements TokenStorageInterface
 {
     private $token;
     
-    public function getToken() 
+    public function getToken() :?TokenInterface
     {
         return $this->token;
     }
 
-    public function setToken(TokenInterface $token = null) 
+    public function setToken(?TokenInterface $token = null) :void
     {
         $this->token = $token;
-        
-        return $this;
     }
 
 }

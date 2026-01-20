@@ -18,17 +18,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RoutingFactory extends AbstractRoutingFactory
 {
-    private RouterInterface $router;
-    private TokenStorageInterface $tokenStorage;
-    private RoutingSourceInterface $routingSource;
     private array $configs;
 
-    public function __construct(ParameterBagInterface $bag, RouterInterface $router, TokenStorageInterface $tokenStorage, RoutingSourceInterface $routingSource)
+    public function __construct(ParameterBagInterface $bag, private RouterInterface $router, private TokenStorageInterface $tokenStorage, private RoutingSourceInterface $routingSource)
     {
         $this->configs = $bag->get("url");
-        $this->router = $router;
-        $this->tokenStorage = $tokenStorage;
-        $this->routingSource = $routingSource;
         $this->setBasePath("/");
     }
 
@@ -99,7 +93,7 @@ class RoutingFactory extends AbstractRoutingFactory
         return $routes;
     }
 
-    protected function updateRole(Collection &$routes, array $settings, callable $callable = null)
+    protected function updateRole(Collection &$routes, array $settings, ?callable $callable = null):Collection
     {
         foreach ($routes as $name => $access) {
             if (!isset($settings[$name])) {

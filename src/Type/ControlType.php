@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Type;
 
 use Symfony\Component\Form\FormEvent;
@@ -19,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class ControlType extends AbstractType 
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options):void
     {
         $name = $builder->getName();
         $builder

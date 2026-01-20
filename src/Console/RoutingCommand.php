@@ -20,15 +20,8 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
 #[AsCommand(name: 'url:configure')]
 class RoutingCommand extends Command
 {
-    private RoutingFactoryInterface $routingFactory;
-    private RoleHierarchyInterface $roleHierarchy;
-    private RoutingSourceInterface $routingSource;
-    public function __construct(RoutingSourceInterface $routingSource, RoutingFactoryInterface $routingFactory, RoleHierarchyInterface $roleHierarchy, mixed $name = null)
+    public function __construct(private RoutingSourceInterface $routingSource, private RoutingFactoryInterface $routingFactory, private RoleHierarchyInterface $roleHierarchy, mixed $name = null)
     {
-        $this->routingFactory = $routingFactory;
-        $this->roleHierarchy = $roleHierarchy;
-        $this->routingSource = $routingSource;
-
         parent::__construct($name);
     }
 

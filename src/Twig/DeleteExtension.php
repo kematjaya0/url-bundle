@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Twig;
 
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
@@ -15,13 +11,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeleteExtension extends UrlExtension
 {
-    private CsrfTokenManagerInterface $tokenGenerator;
-    private TranslatorInterface $translator;
-    
-    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage)
+    public function __construct(private TranslatorInterface $translator, private CsrfTokenManagerInterface $tokenGenerator, Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage)
     {
-        $this->tokenGenerator = $tokenGenerator;
-        $this->translator = $translator;
         parent::__construct($security, $urlGenerator, $credentialStorage);
     }
     

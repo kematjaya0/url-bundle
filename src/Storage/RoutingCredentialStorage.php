@@ -10,13 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 class RoutingCredentialStorage implements CredentialStorageInterface
 {
     private Collection $routings;
-
-    private RoutingFactoryInterface $routingFactory;
     
-    public function __construct(RoutingFactoryInterface $routingFactory, string $basePath = '/') 
+    public function __construct(private RoutingFactoryInterface $routingFactory, string $basePath = '/')
     {
         $routingFactory->setBasePath($basePath);
-        $this->routingFactory = $routingFactory;
         
         $this->routings = new ArrayCollection();
     }

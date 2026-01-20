@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Tests\Util;
 
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -32,7 +28,7 @@ class CsrfTokenManager implements CsrfTokenManagerInterface
         return new CsrfToken($tokenId);
     }
 
-    public function removeToken(string $tokenId) 
+    public function removeToken(string $tokenId) :?string
     {
         
     }

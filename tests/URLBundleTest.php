@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Tests;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class URLBundleTest extends WebTestCase
 {
-    public static function getKernelClass() 
+    public static function getKernelClass() :string
     {
         return AppKernelTest::class;
     }

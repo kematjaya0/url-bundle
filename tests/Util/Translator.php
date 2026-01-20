@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the url-bundle.
- */
-
 namespace Kematjaya\URLBundle\Tests\Util;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,10 +11,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class Translator implements TranslatorInterface 
 {
-    
-    public function trans(string $id, array $parameters = array(), string $domain = null, string $locale = null): string 
+    public function trans(string $id, array $parameters = array(), ?string $domain = null, ?string $locale = null): string
     {
         return $id;
     }
 
+    public function getLocale(): string
+    {
+        return "en";
+    }
 }

@@ -12,7 +12,7 @@ use Symfony\Component\Config\FileLocator;
 class URLExtension extends Extension 
 {
     
-    public function load(array $configs, ContainerBuilder $container) 
+    public function load(array $configs, ContainerBuilder $container) :void
     {
         $locator = new FileLocator(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resources/config');
         $loader = new YamlFileLoader($container, $locator);
