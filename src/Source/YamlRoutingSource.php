@@ -6,7 +6,6 @@ use Kematjaya\UserBundle\Entity\KmjUserInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Exception;
 
 /**
  * @package Kematjaya\URLBundle\Source
@@ -36,10 +35,9 @@ class YamlRoutingSource implements RoutingSourceInterface
 
     public function getAll(): array
     {
-        $filesystem = new Filesystem();
-        if (!$filesystem->exists($this->getPath())) {
-            $string = Yaml::dump([]);
-            $filesystem->dumpFile($this->getPath(), $string);
+        // runs on every request: never write here, a missing file means no settings
+        if (!(new Filesystem())->exists($this->getPath())) {
+            return [];
         }
 
         $menus = Yaml::parseFile($this->getPath());
@@ -56,33 +54,28 @@ class YamlRoutingSource implements RoutingSourceInterface
     public function dump(array $routers):int
     {
         $existing = $this->getAll();
-        try {
-            foreach (array_keys($existing) as $key) {
-                $existing[$key] = array_values($existing[$key]);
-                if (!isset($routers[$key])) {
-                    $routers[$key] = $existing[$key];
-                }
+        foreach (array_keys($existing) as $key) {
+            $existing[$key] = array_values((array) $existing[$key]);
+            if (!isset($routers[$key])) {
+                $routers[$key] = $existing[$key];
             }
-
-            $updateRouters = array_map(function (array $roles) {
-                $key = array_search(KmjUserInterface::ROLE_USER, $roles);
-                if (false !== $key) {
-                    unset($roles[$key]);
-                }
-
-                return array_values($roles);
-            }, array_merge($existing, $routers));
-
-            $string = Yaml::dump($updateRouters);
-            $filesystem = new Filesystem();
-            $filesystem->dumpFile($this->getPath(), $string);
-
-            return count($routers);
-        } catch (Exception $ex) {
-            throw $ex;
         }
 
-        return 0;
+        $updateRouters = array_map(function ($roles) {
+            $roles = (array) $roles;
+            $key = array_search(KmjUserInterface::ROLE_USER, $roles);
+            if (false !== $key) {
+                unset($roles[$key]);
+            }
+
+            return array_values($roles);
+        }, array_merge($existing, $routers));
+
+        $string = Yaml::dump($updateRouters);
+        $filesystem = new Filesystem();
+        $filesystem->dumpFile($this->getPath(), $string);
+
+        return count($routers);
     }
 
 }

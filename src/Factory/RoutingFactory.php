@@ -100,16 +100,17 @@ class RoutingFactory extends AbstractRoutingFactory
 
         $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
 
-            $routes->offsetSet($routeName, in_array($role, $settings[$routeName]));
+            $routes->offsetSet($routeName, in_array($role, (array) $settings[$routeName], true));
         });
 
         return $routes;
     }
 
-    protected function updateRole(Collection &$routes, array $settings, callable $callable = null)
+    protected function updateRole(Collection $routes, array $settings, ?callable $callable = null)
     {
         foreach ($routes as $name => $access) {
-            if (!isset($settings[$name])) {
+            // a route listed without roles ("route: ~") is restricted, not public
+            if (!array_key_exists($name, $settings)) {
                 $routes->offsetSet($name, true);
                 continue;
             }

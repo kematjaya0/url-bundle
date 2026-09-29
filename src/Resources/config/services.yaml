@@ -25,7 +25,7 @@ services:
     Kematjaya\URLBundle\Console\RoutingCommand:
         class: Kematjaya\URLBundle\Console\RoutingCommand
         tags:
-            -  { name: console.command }
+            -  { name: console.command, command: 'url:configure' }
             
     Kematjaya\URLBundle\Repository\URLRepositoryInterface:
         class: Kematjaya\URLBundle\Repository\URLRepository

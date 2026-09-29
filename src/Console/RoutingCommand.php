@@ -2,6 +2,7 @@
 
 namespace Kematjaya\URLBundle\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,9 +18,9 @@ use Kematjaya\UserBundle\Entity\KmjUserInterface;
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
+#[AsCommand(name: 'url:configure', description: 'Dump the application routes into the url resource file')]
 class RoutingCommand extends Command
 {
-    protected static $defaultName = 'url:configure';
 
     private RoutingFactoryInterface $routingFactory;
 
@@ -27,13 +28,14 @@ class RoutingCommand extends Command
 
     private RoutingSourceInterface $routingSource;
 
-    public function __construct(RoutingSourceInterface $routingSource, RoutingFactoryInterface $routingFactory, RoleHierarchyInterface $roleHierarchy, mixed $name = null)
+    public function __construct(RoutingSourceInterface $routingSource, RoutingFactoryInterface $routingFactory, RoleHierarchyInterface $roleHierarchy, ?string $name = null)
     {
         $this->routingFactory = $routingFactory;
         $this->roleHierarchy = $roleHierarchy;
         $this->routingSource = $routingSource;
 
-        parent::__construct($name);
+        // explicit default: on PHP 7.4 the AsCommand attribute is only a comment
+        parent::__construct($name ?? 'url:configure');
     }
 
 

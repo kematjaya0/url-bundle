@@ -35,6 +35,9 @@ class AccessControlType extends AbstractType
         $this->accessControlTransformer = $accessControlTransformer;
     }
 
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $routers = $this->URLRepository->findAll($options['role']);
@@ -58,6 +61,9 @@ class AccessControlType extends AbstractType
         $builder->addModelTransformer($this->accessControlTransformer);
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('role');

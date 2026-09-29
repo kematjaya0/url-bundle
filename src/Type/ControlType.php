@@ -19,6 +19,9 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class ControlType extends AbstractType 
 {
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $name = $builder->getName();

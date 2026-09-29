@@ -9,7 +9,7 @@ namespace Kematjaya\URLBundle\Twig;
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Minwork\Helper\Arr;
 
@@ -35,7 +35,7 @@ class UrlExtension extends AbstractExtension
     
     /**
      * 
-     * @var Security
+     * @var AuthorizationCheckerInterface
      */
     private $security;
     
@@ -44,7 +44,7 @@ class UrlExtension extends AbstractExtension
     const KEY_ACTION = 'action';
     const KEY_OBJECT = 'object';
     
-    public function __construct(Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
+    public function __construct(AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
     {
         $this->urlGenerator = $urlGenerator;
         $this->credentialStorage = $credentialStorage;
@@ -151,7 +151,7 @@ class UrlExtension extends AbstractExtension
                 return null;
             }
             
-            return sprintf('%s="%s"', trim($k), trim($v));
+            return sprintf('%s="%s"', trim($k), htmlspecialchars(trim((string) $v), ENT_QUOTES, 'UTF-8', false));
         });
         
         return trim(implode(" ", array_values($htmls)));
@@ -180,7 +180,7 @@ class UrlExtension extends AbstractExtension
      * 
      * @return Security
      */
-    protected function getSecurity(): Security 
+    protected function getSecurity(): AuthorizationCheckerInterface
     {
         return $this->security;
     }

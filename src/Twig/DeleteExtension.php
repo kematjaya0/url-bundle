@@ -10,7 +10,7 @@ use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
 use Twig\TwigFunction;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -33,7 +33,7 @@ class DeleteExtension extends UrlExtension
      */
     private $translator;
     
-    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, Security $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
+    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
     {
         $this->tokenGenerator = $tokenGenerator;
         $this->translator = $translator;

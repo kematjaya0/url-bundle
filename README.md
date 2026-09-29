@@ -1,4 +1,7 @@
 # url-bundle
+
+Supports symfony 5.4 (PHP >= 7.4) and 6.4 (PHP >= 8.1). For symfony 7 use version 7.x.
+
 1. Installation
     ```
     composer require kematjaya/url-bundle
@@ -20,3 +23,9 @@
          resources_file: 'url.yaml'
          whitelist: []
       ```
+5. run the tests in docker (PHP x Symfony matrix)
+    ```
+    sh docker/test.sh 7.4 5.4   # PHP 7.4 + Symfony 5.4
+    sh docker/test.sh 8.1 6.4   # PHP 8.1 + Symfony 6.4
+    sh docker/test.sh all       # both
+    ```
