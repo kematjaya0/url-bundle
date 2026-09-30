@@ -20,23 +20,11 @@ use Minwork\Helper\Arr;
  */
 class UrlExtension extends AbstractExtension
 {
-    /**
-     *
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
-    /**
-     *
-     * @var CredentialStorageInterface
-     */
-    private $credentialStorage;
+    private CredentialStorageInterface $credentialStorage;
 
-    /**
-     *
-     * @var AuthorizationCheckerInterface
-     */
-    private $security;
+    private AuthorizationCheckerInterface $security;
 
     public const KEY_ICON = 'icon';
     public const KEY_LABEL = 'label';

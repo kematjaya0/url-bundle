@@ -20,17 +20,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class DeleteExtension extends UrlExtension
 {
-    /**
-     *
-     * @var TokenGeneratorInterface
-     */
-    private $tokenGenerator;
+    private CsrfTokenManagerInterface $tokenGenerator;
 
-    /**
-     *
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage)
     {

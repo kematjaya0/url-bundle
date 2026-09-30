@@ -27,7 +27,6 @@
     "require": {
         "php": ">=7.4",
         "doctrine/collections": "^1.6|^2.0",
-        "kematjaya/user-bundle": "^2.0|^3.0|^4.0|^6.4",
         "minwork/array": "^1.13",
         "symfony/config": "^5.4|^6.4",
         "symfony/console": "^5.4|^6.4",
@@ -41,6 +40,7 @@
         "symfony/security-core": "^5.4|^6.4",
         "symfony/security-csrf": "^5.4|^6.4",
         "symfony/service-contracts": "^1.1|^2.0|^3.0",
+        "symfony/translation": "^5.4|^6.4",
         "symfony/translation-contracts": "^2.3|^3.0",
         "symfony/twig-bundle": "^5.4|^6.4",
         "symfony/yaml": "^5.4|^6.4"

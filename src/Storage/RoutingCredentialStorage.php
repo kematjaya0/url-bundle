@@ -19,17 +19,9 @@ use Symfony\Contracts\Service\ResetInterface;
  */
 class RoutingCredentialStorage implements CredentialStorageInterface, ResetInterface
 {
-    /**
-     *
-     * @var Collection
-     */
-    private $routings;
+    private Collection $routings;
 
-    /**
-     *
-     * @var RoutingFactoryInterface
-     */
-    private $routingFactory;
+    private RoutingFactoryInterface $routingFactory;
 
     public function __construct(RoutingFactoryInterface $routingFactory, string $basePath = '/')
     {

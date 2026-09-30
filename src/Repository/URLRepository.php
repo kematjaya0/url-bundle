@@ -15,11 +15,7 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class URLRepository implements URLRepositoryInterface
 {
-    /**
-     *
-     * @var RoutingSourceInterface
-     */
-    private $routingSource;
+    private RoutingSourceInterface $routingSource;
 
 
     public function __construct(RoutingSourceInterface $routingSource)

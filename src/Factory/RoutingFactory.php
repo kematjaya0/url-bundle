@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Kematjaya\UserBundle\Entity\DefaultUser;
 
 /**
  * @package Kematjaya\URLBundle\Factory
@@ -33,6 +32,7 @@ class RoutingFactory extends AbstractRoutingFactory
         $this->router = $router;
         $this->tokenStorage = $tokenStorage;
         $this->routingSource = $routingSource;
+        $this->setBasePath('/');
     }
 
     public function getRouter(): RouterInterface
@@ -93,9 +93,6 @@ class RoutingFactory extends AbstractRoutingFactory
 
         $roles = $user->getRoles();
         $role = end($roles);
-        if ($user instanceof DefaultUser) {
-            $role = $user->getSingleRole();
-        }
 
         $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
 
@@ -105,7 +102,7 @@ class RoutingFactory extends AbstractRoutingFactory
         return $routes;
     }
 
-    protected function updateRole(Collection $routes, array $settings, ?callable $callable = null)
+    protected function updateRole(Collection $routes, array $settings, ?callable $callable = null): Collection
     {
         foreach ($routes as $name => $access) {
             // a route listed without roles ("route: ~") is restricted, not public

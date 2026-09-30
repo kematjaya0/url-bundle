@@ -13,11 +13,7 @@ namespace Kematjaya\URLBundle\Factory;
  */
 abstract class AbstractRoutingFactory implements RoutingFactoryInterface
 {
-    /**
-     *
-     * @var string
-     */
-    private $basePath;
+    private ?string $basePath = null;
 
     public function setBasePath(string $basePath): RoutingFactoryInterface
     {

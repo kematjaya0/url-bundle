@@ -17,17 +17,9 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class AccessControlType extends AbstractType
 {
-    /**
-     *
-     * @var URLRepositoryInterface
-     */
-    private $URLRepository;
+    private URLRepositoryInterface $URLRepository;
 
-    /**
-     *
-     * @var AccessControlTransformer
-     */
-    private $accessControlTransformer;
+    private AccessControlTransformer $accessControlTransformer;
 
     public function __construct(AccessControlTransformer $accessControlTransformer, URLRepositoryInterface $URLRepository)
     {

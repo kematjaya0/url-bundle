@@ -4,7 +4,6 @@ namespace Kematjaya\URLBundle\Tests\Unit\Factory;
 
 use Kematjaya\URLBundle\Factory\RoutingFactory;
 use Kematjaya\URLBundle\Tests\Fixtures\ArrayRoutingSource;
-use Kematjaya\UserBundle\Entity\DefaultUser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Routing\Route;
@@ -27,7 +26,7 @@ class RoutingFactoryTest extends TestCase
         $this->tokenStorage = new TokenStorage();
     }
 
-    private function createFactory(array $settings = [], array $whitelist = []): RoutingFactory
+    private function createFactory(array $settings = [], array $whitelist = [], ?string $basePath = '/admin'): RoutingFactory
     {
         $collection = new RouteCollection();
         $collection->add('homepage', new Route('/'));
@@ -44,7 +43,7 @@ class RoutingFactoryTest extends TestCase
             new ArrayRoutingSource($settings)
         );
 
-        return $factory->setBasePath('/admin');
+        return null === $basePath ? $factory : $factory->setBasePath($basePath);
     }
 
     private function login(UserInterface $user): void
@@ -80,15 +79,25 @@ class RoutingFactoryTest extends TestCase
         $this->assertFalse($routes['admin_item_edit']);
     }
 
-    public function testDefaultUserUsesSingleRole(): void
+    public function testLastRoleOfUserIsUsed(): void
     {
-        $user = (new DefaultUser())->setUsername('budi');
-        $user->setSingleRole('ROLE_B');
-        $this->login($user);
+        $this->login(new InMemoryUser('budi', null, ['ROLE_A', 'ROLE_B']));
 
-        $routes = $this->createFactory(['admin_item_edit' => ['ROLE_B']])->buildInRoles();
+        $routes = $this->createFactory([
+            'admin_item_index' => ['ROLE_A'],
+            'admin_item_edit' => ['ROLE_B'],
+        ])->buildInRoles();
 
+        $this->assertFalse($routes['admin_item_index']);
         $this->assertTrue($routes['admin_item_edit']);
+    }
+
+    public function testWhitelistAppliesWithoutExplicitBasePath(): void
+    {
+        $factory = $this->createFactory([], ['admin_item_index'], null);
+
+        $this->assertSame('/', $factory->getBasePath());
+        $this->assertSame(['homepage', 'admin_item_edit', 'admin_item_print'], $factory->build()->getKeys());
     }
 
     /**
