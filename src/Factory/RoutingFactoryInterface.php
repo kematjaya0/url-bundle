@@ -13,37 +13,36 @@ use Doctrine\Common\Collections\Collection;
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
-interface RoutingFactoryInterface 
+interface RoutingFactoryInterface
 {
-    
     /**
-     * 
+     *
      * @return array
      */
-    public function getAll():array;
+    public function getAll(): array;
     /**
-     * 
+     *
      * @return Collection
      */
     public function build(): Collection;
-    
+
     /**
-     * 
+     *
      * @param string $basePath
      * @return RoutingFactoryInterface
      */
-    public function setBasePath(string $basePath):self;
-    
+    public function setBasePath(string $basePath): self;
+
     /**
-     * 
+     *
      * @return string|null
      */
-    public function getBasePath():?string;
-    
+    public function getBasePath(): ?string;
+
     /**
-     * 
+     *
      * @return Collection
      */
-    public function buildInRoles():Collection;
-    
+    public function buildInRoles(): Collection;
+
 }

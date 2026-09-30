@@ -10,59 +10,67 @@ use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Contracts\Service\ResetInterface;
 
 /**
  * @package Kematjaya\URLBundle\Storage
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class RoutingCredentialStorage implements CredentialStorageInterface
+class RoutingCredentialStorage implements CredentialStorageInterface, ResetInterface
 {
-    
     /**
-     * 
+     *
      * @var Collection
      */
     private $routings;
-    
+
     /**
-     * 
+     *
      * @var RoutingFactoryInterface
      */
     private $routingFactory;
-    
-    public function __construct(RoutingFactoryInterface $routingFactory, string $basePath = '/') 
+
+    public function __construct(RoutingFactoryInterface $routingFactory, string $basePath = '/')
     {
         $routingFactory->setBasePath($basePath);
         $this->routingFactory = $routingFactory;
-        
+
         $this->routings = new ArrayCollection();
     }
-    
-    public function getAccess(string $routeName): bool 
+
+    public function getAccess(string $routeName): bool
     {
         if (!$this->getAccesses()->offsetExists($routeName)) {
-            
+
             return true;
         }
-        
+
         return $this->getAccesses()->offsetGet($routeName);
     }
 
-    public function getAccesses(): Collection 
+    public function getAccesses(): Collection
     {
         if ($this->routings->isEmpty()) {
             $this->routings = $this->routingFactory->buildInRoles();
         }
-        
+
         return $this->routings;
     }
 
-    public function setAccess(string $routeName, bool $access): CredentialStorageInterface 
+    public function setAccess(string $routeName, bool $access): CredentialStorageInterface
     {
         $this->getAccesses()->offsetSet($routeName, $access);
-        
+
         return $this;
     }
 
+    /**
+     * Hak akses dihitung untuk user yang sedang login, jadi tidak boleh terbawa
+     * ke request berikutnya bila container dipakai ulang (worker, functional test).
+     */
+    public function reset(): void
+    {
+        $this->routings = new ArrayCollection();
+    }
 }

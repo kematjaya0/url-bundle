@@ -21,7 +21,6 @@ use Kematjaya\UserBundle\Entity\KmjUserInterface;
 #[AsCommand(name: 'url:configure', description: 'Dump the application routes into the url resource file')]
 class RoutingCommand extends Command
 {
-
     private RoutingFactoryInterface $routingFactory;
 
     private RoleHierarchyInterface $roleHierarchy;
@@ -39,7 +38,7 @@ class RoutingCommand extends Command
     }
 
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title("Collect route path");

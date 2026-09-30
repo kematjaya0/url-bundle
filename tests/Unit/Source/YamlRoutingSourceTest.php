@@ -68,4 +68,14 @@ class YamlRoutingSourceTest extends TestCase
 
         $this->assertSame(['item_index' => ['ROLE_A']], $source->getAll());
     }
+
+    public function testFileWithoutMappingIsTreatedAsEmpty(): void
+    {
+        $source = $this->createSource();
+        (new Filesystem())->dumpFile($source->getPath(), 'bukan mapping');
+
+        $this->assertSame([], $source->getAll());
+        $this->assertSame(1, $source->dump(['item_index' => ['ROLE_A']]));
+        $this->assertSame(['item_index' => ['ROLE_A']], $source->getAll());
+    }
 }

@@ -25,7 +25,7 @@ Supports symfony 5.4 (PHP >= 7.4) and 6.4 (PHP >= 8.1). For symfony 7 use versio
       ```
 5. run the tests in docker (PHP x Symfony matrix)
     ```
-    sh docker/test.sh 7.4 5.4   # PHP 7.4 + Symfony 5.4
-    sh docker/test.sh 8.1 6.4   # PHP 8.1 + Symfony 6.4
-    sh docker/test.sh all       # both
+    sh ../test.sh url-bundle 7.4 5.4   # PHP 7.4 + Symfony 5.4
+    sh ../test.sh url-bundle 8.1 6.4   # PHP 8.1 + Symfony 6.4
+    sh ../test.sh url-bundle all      # PHP 8.1 & 8.3 + Symfony 6.4
     ```

@@ -16,37 +16,36 @@ use Doctrine\Common\Collections\Collection;
  */
 class CollectionCredentialStorage implements CredentialStorageInterface
 {
-    
     /**
-     * 
+     *
      * @var Collection
      */
     private $access;
-    
-    public function __construct() 
+
+    public function __construct()
     {
         $this->access = new ArrayCollection();
     }
-    
-    public function getAccess(string $routeName): bool 
+
+    public function getAccess(string $routeName): bool
     {
         if (!$this->access->offsetExists($routeName)) {
-            
+
             return true;
         }
-        
+
         return $this->access->offsetGet($routeName);
     }
 
-    public function getAccesses(): Collection 
+    public function getAccesses(): Collection
     {
         return $this->access;
     }
 
-    public function setAccess(string $routeName, bool $access): CredentialStorageInterface 
+    public function setAccess(string $routeName, bool $access): CredentialStorageInterface
     {
         $this->access->offsetSet($routeName, $access);
-        
+
         return $this;
     }
 

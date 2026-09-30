@@ -19,7 +19,6 @@ use Kematjaya\UserBundle\Entity\DefaultUser;
  */
 class RoutingFactory extends AbstractRoutingFactory
 {
-
     private RouterInterface $router;
 
     private TokenStorageInterface $tokenStorage;
@@ -76,7 +75,7 @@ class RoutingFactory extends AbstractRoutingFactory
         return $routes;
     }
 
-    public function buildInRoles():Collection
+    public function buildInRoles(): Collection
     {
         $routes = $this->build();
         $settings = $this->routingSource->getAll();

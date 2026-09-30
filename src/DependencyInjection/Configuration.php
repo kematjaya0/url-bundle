@@ -12,8 +12,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    
-    public function getConfigTreeBuilder(): TreeBuilder 
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('url');
         $builder->getRootNode()
@@ -24,7 +23,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarPrototype()->end()
                     ->end()
                 ->end();
-        
+
         return $builder;
     }
 

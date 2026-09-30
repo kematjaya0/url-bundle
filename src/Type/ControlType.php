@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class ControlType extends AbstractType 
+class ControlType extends AbstractType
 {
     /**
      * @return void
@@ -29,12 +29,12 @@ class ControlType extends AbstractType
             ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($name) {
                 $form = $event->getForm();
                 foreach ($event->getData() as $k => $value) {
-                    
+
                     $form->add($k, CheckboxType::class, [
                         'data' => $value, 'required' => false,
                         'label' => str_replace($name . '_', '', $k)
                     ]);
-                }   
+                }
             });
     }
 }

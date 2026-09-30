@@ -27,7 +27,7 @@ class URLRepository implements URLRepositoryInterface
         $this->routingSource = $routingSource;
     }
 
-    public function findAll(string $role):array
+    public function findAll(string $role): array
     {
         $routers = $this->routingSource->getAll();
         $groups = $this->getIndexRoutes($routers);
@@ -36,7 +36,7 @@ class URLRepository implements URLRepositoryInterface
         return $values;
     }
 
-    public function save(array $routers):void
+    public function save(array $routers): void
     {
         $this->routingSource->dump($routers);
     }
@@ -46,7 +46,7 @@ class URLRepository implements URLRepositoryInterface
      * @param array $routers
      * @return array
      */
-    protected function getIndexRoutes(array $routers):array
+    protected function getIndexRoutes(array $routers): array
     {
         return array_filter($routers, function ($row) {
 
@@ -55,7 +55,7 @@ class URLRepository implements URLRepositoryInterface
     }
 
 
-    protected function groupingRoutes(array $routers, array $groups, string $role):array
+    protected function groupingRoutes(array $routers, array $groups, string $role): array
     {
         $values = [];
         foreach ($groups as $k => $group) {
@@ -96,7 +96,7 @@ class URLRepository implements URLRepositoryInterface
         return $values;
     }
 
-    protected function findContainingOthers(array $routers):array
+    protected function findContainingOthers(array $routers): array
     {
         return array_filter($routers, function ($value) {
             foreach ($value as $routeName => $v) {
@@ -110,7 +110,7 @@ class URLRepository implements URLRepositoryInterface
         });
     }
 
-    protected function filtering(string $k, array $routers, array $groups):array
+    protected function filtering(string $k, array $routers, array $groups): array
     {
         $name = str_replace("_index", '', $k);
         $result = [];
@@ -123,12 +123,12 @@ class URLRepository implements URLRepositoryInterface
                 return false;
             }
 
-            if (!preg_match("/^" . $name . "/i", $key)) {
+            if (!preg_match("/^" . preg_quote($name, "/") . "/i", $key)) {
                 return false;
             }
 
             $keys = explode("_", $key);
-            $baseKey = array_slice($keys, 0,count($keys)-1);
+            $baseKey = array_slice($keys, 0, count($keys) - 1);
             if (!in_array("index", $keys)) {
                 $otherIndex = implode("_", $baseKey) . "_index";
                 if (!isset($groups[$otherIndex])) {
@@ -147,11 +147,11 @@ class URLRepository implements URLRepositoryInterface
         return array_merge($result, $filtered);
     }
 
-    protected function checkRole(array $values, string $role):array
+    protected function checkRole(array $values, string $role): array
     {
         $results = [];
         foreach ($values as $n => $roles) {
-            $results[$n] = in_array($role, $roles);
+            $results[$n] = in_array($role, (array) $roles, true);
         }
 
         return $results;

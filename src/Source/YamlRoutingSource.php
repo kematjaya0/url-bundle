@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class YamlRoutingSource implements RoutingSourceInterface
 {
-
     /**
      *
      * @var string
@@ -28,7 +27,7 @@ class YamlRoutingSource implements RoutingSourceInterface
         $this->filePath = $basePath . DIRECTORY_SEPARATOR . $configs["resources_file"];
     }
 
-    public function getPath():string
+    public function getPath(): string
     {
         return $this->filePath;
     }
@@ -42,7 +41,8 @@ class YamlRoutingSource implements RoutingSourceInterface
 
         $menus = Yaml::parseFile($this->getPath());
 
-        return null !== $menus ? $menus : [];
+        // file kosong atau bukan mapping (mis. berisi satu string) dianggap tanpa aturan
+        return is_array($menus) ? $menus : [];
     }
 
     /**
@@ -51,7 +51,7 @@ class YamlRoutingSource implements RoutingSourceInterface
      * @return void
      * @throws Exception
      */
-    public function dump(array $routers):int
+    public function dump(array $routers): int
     {
         $existing = $this->getAll();
         foreach (array_keys($existing) as $key) {

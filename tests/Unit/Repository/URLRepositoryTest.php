@@ -23,6 +23,29 @@ class URLRepositoryTest extends TestCase
         ], $repository->findAll('ROLE_A'));
     }
 
+    public function testRouteNameIsNotTreatedAsRegex(): void
+    {
+        $repository = new URLRepository(new ArrayRoutingSource([
+            'app.item_index' => ['ROLE_A'],
+            'app.item_edit' => ['ROLE_A'],
+            // cocok dengan /^app.item/ bila titik tidak di-escape
+            'appXitem_print' => ['ROLE_A'],
+            'report(v2)_index' => ['ROLE_A'],
+        ]));
+
+        $this->assertSame([
+            'app.item' => ['app.item_index' => true, 'app.item_edit' => true],
+            'report(v2)' => ['report(v2)_index' => true],
+        ], $repository->findAll('ROLE_A'));
+    }
+
+    public function testScalarRoleInSourceIsAccepted(): void
+    {
+        $repository = new URLRepository(new ArrayRoutingSource(['item_index' => 'ROLE_A']));
+
+        $this->assertSame(['item' => ['item_index' => true]], $repository->findAll('ROLE_A'));
+    }
+
     public function testSaveDumpsRoutes(): void
     {
         $source = new ArrayRoutingSource();

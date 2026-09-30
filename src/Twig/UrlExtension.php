@@ -20,164 +20,163 @@ use Minwork\Helper\Arr;
  */
 class UrlExtension extends AbstractExtension
 {
-    
     /**
-     * 
+     *
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
-    
+
     /**
-     * 
+     *
      * @var CredentialStorageInterface
      */
     private $credentialStorage;
-    
+
     /**
-     * 
+     *
      * @var AuthorizationCheckerInterface
      */
     private $security;
-    
-    const KEY_ICON = 'icon';
-    const KEY_LABEL= 'label';
-    const KEY_ACTION = 'action';
-    const KEY_OBJECT = 'object';
-    
-    public function __construct(AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
+
+    public const KEY_ICON = 'icon';
+    public const KEY_LABEL = 'label';
+    public const KEY_ACTION = 'action';
+    public const KEY_OBJECT = 'object';
+
+    public function __construct(AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage)
     {
         $this->urlGenerator = $urlGenerator;
         $this->credentialStorage = $credentialStorage;
         $this->security = $security;
     }
-    
-    public function getFunctions():array
+
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('link_to', [$this, 'linkTo'], ['is_safe' => ['html']]),
             new TwigFunction('submit_tag', [$this, 'submitTag'], ['is_safe' => ['html']])
         ];
     }
-    
+
     /**
-     * 
+     *
      * @param string $routeName
      * @param array $routeParameters
      * @param array $attributes
      * @param array $granteds
      * @param bool $relative
      */
-    public function linkTo(string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = array(), bool $relative = false):?string
+    public function linkTo(string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = array(), bool $relative = false): ?string
     {
         $icon = isset($attributes[self::KEY_ICON]) ? $attributes[self::KEY_ICON] : null;
-        $label= isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'button';
-        
+        $label = isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'button';
+
         if (!$this->getCredentialStorage()->getAccess($routeName)) {
-            
+
             return null;
         }
-        
+
         if (!$this->isGranted($granteds)) {
-            
+
             return null;
         }
-        
+
         $url = $this->urlGenerator->generate($routeName, $routeParameters, $relative ? UrlGeneratorInterface::RELATIVE_PATH : UrlGeneratorInterface::ABSOLUTE_PATH);
-        
+
         return sprintf('<a href="%s" %s>%s %s</a>', $url, $this->generateHTMLAttributes($attributes), $icon, $label);
     }
-    
+
     /**
-     * 
+     *
      * @param string $routeName
      * @param array $attributes
      * @param array $granteds
      * @return string|null
      */
-    public function submitTag(string $routeName, array $attributes = [], array $granteds = array()):?string
+    public function submitTag(string $routeName, array $attributes = [], array $granteds = array()): ?string
     {
         $icon = isset($attributes[self::KEY_ICON]) ? $attributes[self::KEY_ICON] : null;
-        $label= isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'button';
-        
+        $label = isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'button';
+
         if (!$this->getCredentialStorage()->getAccess($routeName)) {
-            
+
             return null;
         }
-        
+
         if (!$this->isGranted($granteds)) {
-            
+
             return null;
         }
-        
+
         return sprintf('<button type="submit" %s>%s %s</button>', $this->generateHTMLAttributes($attributes), $icon, $label);
     }
-    
+
     /**
-     * 
+     *
      * @param array $granteds
      * @return bool
      * @throws \Exception
      */
-    protected function isGranted(array $granteds = array()):bool
+    protected function isGranted(array $granteds = array()): bool
     {
         if (empty($granteds)) {
-            
+
             return true;
         }
-        
+
         if (!isset($granteds[self::KEY_ACTION])) {
-            
+
             throw new \Exception(sprintf("granted key '%s' is required", self::KEY_ACTION));
         }
-        
+
         if (!isset($granteds[self::KEY_OBJECT])) {
-            
+
             throw new \Exception(sprintf("granted key '%s' is required", self::KEY_OBJECT));
         }
-        
+
         return $this->security->isGranted($granteds[self::KEY_ACTION], $granteds[self::KEY_OBJECT]);
     }
-    
+
     /**
-     * 
+     *
      * @param array $attributes
      * @return string|null
      */
-    protected function generateHTMLAttributes(array $attributes = array()):?string
+    protected function generateHTMLAttributes(array $attributes = array()): ?string
     {
-        $htmls= Arr::map($attributes, function ($k, $v) {
+        $htmls = Arr::map($attributes, function ($k, $v) {
             if (self::KEY_ICON === strtolower($k) or self::KEY_LABEL === strtolower($k)) {
-                
+
                 return null;
             }
-            
+
             return sprintf('%s="%s"', trim($k), htmlspecialchars(trim((string) $v), ENT_QUOTES, 'UTF-8', false));
         });
-        
+
         return trim(implode(" ", array_values($htmls)));
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @return UrlGeneratorInterface
      */
     protected function getUrlGenerator(): UrlGeneratorInterface
     {
         return $this->urlGenerator;
     }
-    
+
     /**
-     * 
+     *
      * @return CredentialStorageInterface
      */
-    protected function getCredentialStorage():CredentialStorageInterface
+    protected function getCredentialStorage(): CredentialStorageInterface
     {
         return $this->credentialStorage;
     }
-    
+
     /**
-     * 
+     *
      * @return Security
      */
     protected function getSecurity(): AuthorizationCheckerInterface

@@ -20,47 +20,46 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class DeleteExtension extends UrlExtension
 {
-    
     /**
-     * 
+     *
      * @var TokenGeneratorInterface
      */
     private $tokenGenerator;
-    
+
     /**
-     * 
+     *
      * @var TranslatorInterface
      */
     private $translator;
-    
-    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage) 
+
+    public function __construct(TranslatorInterface $translator, CsrfTokenManagerInterface $tokenGenerator, AuthorizationCheckerInterface $security, UrlGeneratorInterface $urlGenerator, CredentialStorageInterface $credentialStorage)
     {
         $this->tokenGenerator = $tokenGenerator;
         $this->translator = $translator;
         parent::__construct($security, $urlGenerator, $credentialStorage);
     }
-    
-    public function getFunctions():array
+
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('delete_tag', [$this, 'deleteTag'], ['is_safe' => ['html']])
         ];
     }
-    
-    public function deleteTag(string $tokenId, string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = array(), array $extraContent = array(), bool $relative = false):?string
+
+    public function deleteTag(string $tokenId, string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = array(), array $extraContent = array(), bool $relative = false): ?string
     {
         $attributes[self::KEY_LABEL] = isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'delete';
-        
+
         if (!$this->getCredentialStorage()->getAccess($routeName)) {
-            
+
             return null;
         }
-        
+
         if (!$this->isGranted($granteds)) {
-            
+
             return null;
         }
-        
+
         $url = $this->getUrlGenerator()->generate($routeName, $routeParameters, $relative ? UrlGeneratorInterface::RELATIVE_PATH : UrlGeneratorInterface::ABSOLUTE_PATH);
         return sprintf('<form method="post" style="display: inline;" action="%s" onsubmit="return confirm(\'%s\');">
                     <input type="hidden" name="_method" value="DELETE">

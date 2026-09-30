@@ -40,6 +40,7 @@
         "symfony/security-bundle": "^5.4|^6.4",
         "symfony/security-core": "^5.4|^6.4",
         "symfony/security-csrf": "^5.4|^6.4",
+        "symfony/service-contracts": "^1.1|^2.0|^3.0",
         "symfony/translation-contracts": "^2.3|^3.0",
         "symfony/twig-bundle": "^5.4|^6.4",
         "symfony/yaml": "^5.4|^6.4"
