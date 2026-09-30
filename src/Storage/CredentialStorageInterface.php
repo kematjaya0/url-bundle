@@ -9,11 +9,11 @@ use Doctrine\Common\Collections\Collection;
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
-interface CredentialStorageInterface 
+interface CredentialStorageInterface
 {
-    public function getAccess(string $routeName):bool;
-    
-    public function setAccess(string $routeName, bool $access):self;
-    
+    public function getAccess(string $routeName): bool;
+
+    public function setAccess(string $routeName, bool $access): self;
+
     public function getAccesses(): Collection;
 }

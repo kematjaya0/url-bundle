@@ -20,10 +20,14 @@ class RoutingFactory extends AbstractRoutingFactory
 {
     private array $configs;
 
-    public function __construct(ParameterBagInterface $bag, private RouterInterface $router, private TokenStorageInterface $tokenStorage, private RoutingSourceInterface $routingSource)
-    {
+    public function __construct(
+        ParameterBagInterface $bag,
+        private RouterInterface $router,
+        private TokenStorageInterface $tokenStorage,
+        private RoutingSourceInterface $routingSource
+    ) {
         $this->configs = $bag->get("url");
-        $this->setBasePath("/");
+        $this->setBasePath('/');
     }
 
     public function getRouter(): RouterInterface
@@ -66,7 +70,7 @@ class RoutingFactory extends AbstractRoutingFactory
         return $routes;
     }
 
-    public function buildInRoles():Collection
+    public function buildInRoles(): Collection
     {
         $routes = $this->build();
         $settings = $this->routingSource->getAll();
@@ -87,16 +91,17 @@ class RoutingFactory extends AbstractRoutingFactory
 
         $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
 
-            $routes->offsetSet($routeName, in_array($role, $settings[$routeName]));
+            $routes->offsetSet($routeName, in_array($role, (array) $settings[$routeName], true));
         });
 
         return $routes;
     }
 
-    protected function updateRole(Collection &$routes, array $settings, ?callable $callable = null):Collection
+    protected function updateRole(Collection $routes, array $settings, ?callable $callable = null): Collection
     {
         foreach ($routes as $name => $access) {
-            if (!isset($settings[$name])) {
+            // a route listed without roles ("route: ~") is restricted, not public
+            if (!array_key_exists($name, $settings)) {
                 $routes->offsetSet($name, true);
                 continue;
             }

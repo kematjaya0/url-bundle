@@ -1,6 +1,0 @@
-framework:
-    test: true
-security:
-    firewalls:
-        test: ~
-

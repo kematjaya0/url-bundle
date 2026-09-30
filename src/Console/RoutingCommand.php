@@ -17,23 +17,26 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
-#[AsCommand(name: 'url:configure')]
+#[AsCommand(name: 'url:configure', description: 'Dump the application routes into the url resource file')]
 class RoutingCommand extends Command
 {
-    public function __construct(private RoutingSourceInterface $routingSource, private RoutingFactoryInterface $routingFactory, private RoleHierarchyInterface $roleHierarchy, mixed $name = null)
-    {
-        parent::__construct($name);
+    public function __construct(
+        private RoutingSourceInterface $routingSource,
+        private RoutingFactoryInterface $routingFactory,
+        private RoleHierarchyInterface $roleHierarchy,
+        ?string $name = null
+    ) {
+        parent::__construct($name ?? 'url:configure');
     }
 
-
-    protected function execute(InputInterface $input, OutputInterface $output):int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title("Collect route path");
 
         $path = $io->askQuestion(new Question("insert base url", "/"));
         $this->routingFactory->setBasePath($path);
-        $roles = $this->roleHierarchy->getReachableRoleNames(["ROLE_SUPER_USER"]);
+        $roles = $this->roleHierarchy->getReachableRoleNames(['ROLE_SUPER_USER']);
         $resultSets = [];
         foreach ($this->routingFactory->build()->getKeys() as $name) {
             $resultSets[$name] = $roles;

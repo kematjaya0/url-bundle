@@ -12,47 +12,37 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class AccessControlTransformer implements DataTransformerInterface
 {
-    
     public function __construct(private RoutingSourceInterface $routingSource)
     {
-        $this->routingSource = $routingSource;
     }
-    
-    /**
-     * 
-     * @param type $value
-     * @return mixed
-     */
-    public function reverseTransform(mixed $value):mixed
+
+    public function reverseTransform(mixed $value): mixed
     {
+        $routers = $this->routingSource->getAll();
+        if (!is_array($value) || !isset($value['role'])) {
+            return $routers;
+        }
+
         $role = $value['role'];
         unset($value['role']);
-        $routers = $this->routingSource->getAll();
         foreach ($value as $val) {
             foreach ($val as $credentials) {
                 $this->process($role, $credentials, $routers);
             }
         }
-        
+
         return $routers;
     }
 
-    /**
-     * 
-     * @param type $value
-     * @return mixed
-     */
-    public function transform(mixed $value) :mixed
+    public function transform(mixed $value): mixed
     {
         return $value;
     }
 
-    protected function process(string $role, array $credentials, array &$routers):array
+    protected function process(string $role, array $credentials, array &$routers): array
     {
         foreach ($credentials as $route => $credential) {
-            if (!isset($routers[$route])) {
-                $routers[$route] = [];
-            }
+            $routers[$route] = (array) ($routers[$route] ?? []);
             if ($credential) {
                 $routers[$route] = in_array($role, $routers[$route]) ? $routers[$route] : array_merge([$role], $routers[$route]);
                 continue;
@@ -63,11 +53,11 @@ class AccessControlTransformer implements DataTransformerInterface
                 continue;
             }
 
-            $routers[$route] = array_filter($routers[$route], function ($row) use ($role) {
+            $routers[$route] = array_values(array_filter($routers[$route], function ($row) use ($role) {
                 return $row !== $role;
-            });
+            }));
         }
-        
+
         return $routers;
     }
 }

@@ -12,10 +12,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    
-    public function getConfigTreeBuilder(): TreeBuilder 
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('menu');
+        $builder = new TreeBuilder('url');
         $builder->getRootNode()
                 ->children()
                     ->scalarNode('resources_dir')->defaultValue('%kernel.project_dir%/resources')->end()
@@ -24,7 +23,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarPrototype()->end()
                     ->end()
                 ->end();
-        
+
         return $builder;
     }
 
