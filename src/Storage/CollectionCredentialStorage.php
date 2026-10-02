@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\Collection;
  */
 class CollectionCredentialStorage implements CredentialStorageInterface
 {
-    private Collection $access;
+    private readonly Collection $access;
 
     public function __construct()
     {

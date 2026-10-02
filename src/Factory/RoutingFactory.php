@@ -2,12 +2,12 @@
 
 namespace Kematjaya\URLBundle\Factory;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Kematjaya\URLBundle\Source\RoutingSourceInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -18,13 +18,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RoutingFactory extends AbstractRoutingFactory
 {
-    private array $configs;
+    private readonly array $configs;
 
     public function __construct(
         ParameterBagInterface $bag,
-        private RouterInterface $router,
-        private TokenStorageInterface $tokenStorage,
-        private RoutingSourceInterface $routingSource
+        private readonly RouterInterface $router,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly RoutingSourceInterface $routingSource
     ) {
         $this->configs = $bag->get("url");
         $this->setBasePath('/');
@@ -89,7 +89,7 @@ class RoutingFactory extends AbstractRoutingFactory
         $roles = $user->getRoles();
         $role = end($roles);
 
-        $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings) {
+        $this->updateRole($routes, $settings, function ($routes, $routeName) use ($role, $settings): void {
 
             $routes->offsetSet($routeName, in_array($role, (array) $settings[$routeName], true));
         });

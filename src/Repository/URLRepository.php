@@ -15,9 +15,7 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class URLRepository implements URLRepositoryInterface
 {
-    public function __construct(private RoutingSourceInterface $routingSource)
-    {
-    }
+    public function __construct(private readonly RoutingSourceInterface $routingSource) {}
 
     public function findAll(string $role): array
     {
@@ -35,15 +33,10 @@ class URLRepository implements URLRepositoryInterface
 
     /**
      * Get Index Routes
-     * @param array $routers
-     * @return array
      */
     protected function getIndexRoutes(array $routers): array
     {
-        return array_filter($routers, function ($row) {
-
-            return preg_match("/index\z/i", $row);
-        }, ARRAY_FILTER_USE_KEY);
+        return array_filter($routers, fn($row): int|false => preg_match("/index\z/i", $row), ARRAY_FILTER_USE_KEY);
     }
 
 
@@ -57,9 +50,7 @@ class URLRepository implements URLRepositoryInterface
                 $role
             );
         }
-        $values = array_filter($values, function ($value) {
-            return !empty($value);
-        });
+        $values = array_filter($values, fn(array $value): bool => !empty($value));
 
         $containtOther = $this->findContainingOthers($values);
         foreach ($containtOther as $k => $containt) {
@@ -90,7 +81,7 @@ class URLRepository implements URLRepositoryInterface
 
     protected function findContainingOthers(array $routers): array
     {
-        return array_filter($routers, function ($value) {
+        return array_filter($routers, function ($value): bool {
             foreach ($value as $routeName => $v) {
                 if (preg_match("/index\z/i", $routeName)) {
 

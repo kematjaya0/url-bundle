@@ -6,10 +6,9 @@
 
 namespace Kematjaya\URLBundle\Storage;
 
-use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
-use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**
@@ -21,7 +20,7 @@ class RoutingCredentialStorage implements CredentialStorageInterface, ResetInter
 {
     private Collection $routings;
 
-    public function __construct(private RoutingFactoryInterface $routingFactory, string $basePath = '/')
+    public function __construct(private readonly RoutingFactoryInterface $routingFactory, string $basePath = '/')
     {
         $routingFactory->setBasePath($basePath);
 

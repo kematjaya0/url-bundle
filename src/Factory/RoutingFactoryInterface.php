@@ -11,34 +11,13 @@ use Doctrine\Common\Collections\Collection;
  */
 interface RoutingFactoryInterface
 {
-    /**
-     *
-     * @return array
-     */
     public function getAll(): array;
-    /**
-     *
-     * @return Collection
-     */
     public function build(): Collection;
 
-    /**
-     *
-     * @param string $basePath
-     * @return RoutingFactoryInterface
-     */
     public function setBasePath(string $basePath): self;
 
-    /**
-     *
-     * @return string|null
-     */
     public function getBasePath(): ?string;
 
-    /**
-     *
-     * @return Collection
-     */
     public function buildInRoles(): Collection;
 
 }

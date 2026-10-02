@@ -2,9 +2,9 @@
 
 namespace Kematjaya\URLBundle\Source;
 
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * @package Kematjaya\URLBundle\Source
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class YamlRoutingSource implements RoutingSourceInterface
 {
-    private string $filePath;
+    private readonly string $filePath;
 
     public function __construct(ParameterBagInterface $bag)
     {
@@ -41,8 +41,6 @@ class YamlRoutingSource implements RoutingSourceInterface
     }
 
     /**
-     *
-     * @param array $routers
      * @return void
      * @throws Exception
      */
@@ -51,12 +49,10 @@ class YamlRoutingSource implements RoutingSourceInterface
         $existing = $this->getAll();
         foreach (array_keys($existing) as $key) {
             $existing[$key] = array_values((array) $existing[$key]);
-            if (!isset($routers[$key])) {
-                $routers[$key] = $existing[$key];
-            }
+            $routers[$key] ??= $existing[$key];
         }
 
-        $updateRouters = array_map(function ($roles) {
+        $updateRouters = array_map(function (array $roles): array {
             $roles = (array) $roles;
             $key = array_search('ROLE_USER', $roles);
             if (false !== $key) {

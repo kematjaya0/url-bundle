@@ -7,11 +7,11 @@
 namespace Kematjaya\URLBundle\Twig;
 
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
+use Minwork\Helper\Arr;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Minwork\Helper\Arr;
 
 /**
  * @package Kematjaya\URLBundle\Twig
@@ -26,32 +26,23 @@ class UrlExtension extends AbstractExtension
     public const KEY_OBJECT = 'object';
 
     public function __construct(
-        private AuthorizationCheckerInterface $security,
-        private UrlGeneratorInterface $urlGenerator,
-        private CredentialStorageInterface $credentialStorage
-    ) {
-    }
+        private readonly AuthorizationCheckerInterface $security,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly CredentialStorageInterface $credentialStorage
+    ) {}
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('link_to', [$this, 'linkTo'], ['is_safe' => ['html']]),
-            new TwigFunction('submit_tag', [$this, 'submitTag'], ['is_safe' => ['html']])
+            new TwigFunction('link_to', $this->linkTo(...), ['is_safe' => ['html']]),
+            new TwigFunction('submit_tag', $this->submitTag(...), ['is_safe' => ['html']]),
         ];
     }
 
-    /**
-     *
-     * @param string $routeName
-     * @param array $routeParameters
-     * @param array $attributes
-     * @param array $granteds
-     * @param bool $relative
-     */
-    public function linkTo(string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = array(), bool $relative = false): ?string
+    public function linkTo(string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = [], bool $relative = false): ?string
     {
-        $icon = isset($attributes[self::KEY_ICON]) ? $attributes[self::KEY_ICON] : null;
-        $label = isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'button';
+        $icon = $attributes[self::KEY_ICON] ?? null;
+        $label = $attributes[self::KEY_LABEL] ?? 'button';
 
         if (!$this->getCredentialStorage()->getAccess($routeName)) {
 
@@ -68,17 +59,10 @@ class UrlExtension extends AbstractExtension
         return sprintf('<a href="%s" %s>%s %s</a>', $url, $this->generateHTMLAttributes($attributes), $icon, $label);
     }
 
-    /**
-     *
-     * @param string $routeName
-     * @param array $attributes
-     * @param array $granteds
-     * @return string|null
-     */
-    public function submitTag(string $routeName, array $attributes = [], array $granteds = array()): ?string
+    public function submitTag(string $routeName, array $attributes = [], array $granteds = []): ?string
     {
-        $icon = isset($attributes[self::KEY_ICON]) ? $attributes[self::KEY_ICON] : null;
-        $label = isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'button';
+        $icon = $attributes[self::KEY_ICON] ?? null;
+        $label = $attributes[self::KEY_LABEL] ?? 'button';
 
         if (!$this->getCredentialStorage()->getAccess($routeName)) {
 
@@ -94,12 +78,9 @@ class UrlExtension extends AbstractExtension
     }
 
     /**
-     *
-     * @param array $granteds
-     * @return bool
      * @throws \Exception
      */
-    protected function isGranted(array $granteds = array()): bool
+    protected function isGranted(array $granteds = []): bool
     {
         if (empty($granteds)) {
 
@@ -119,14 +100,9 @@ class UrlExtension extends AbstractExtension
         return $this->security->isGranted($granteds[self::KEY_ACTION], $granteds[self::KEY_OBJECT]);
     }
 
-    /**
-     *
-     * @param array $attributes
-     * @return string|null
-     */
-    protected function generateHTMLAttributes(array $attributes = array()): ?string
+    protected function generateHTMLAttributes(array $attributes = []): ?string
     {
-        $htmls = Arr::map($attributes, function ($k, $v) {
+        $htmls = Arr::map($attributes, function ($k, $v): ?string {
             if (self::KEY_ICON === strtolower($k) or self::KEY_LABEL === strtolower($k)) {
 
                 return null;
@@ -139,26 +115,17 @@ class UrlExtension extends AbstractExtension
     }
 
 
-    /**
-     *
-     * @return UrlGeneratorInterface
-     */
     protected function getUrlGenerator(): UrlGeneratorInterface
     {
         return $this->urlGenerator;
     }
 
-    /**
-     *
-     * @return CredentialStorageInterface
-     */
     protected function getCredentialStorage(): CredentialStorageInterface
     {
         return $this->credentialStorage;
     }
 
     /**
-     *
      * @return Security
      */
     protected function getSecurity(): AuthorizationCheckerInterface

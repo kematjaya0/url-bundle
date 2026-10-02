@@ -10,10 +10,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class YamlRoutingSourceTest extends TestCase
 {
-    /**
-     * @var string
-     */
-    private $dir;
+    private string $dir;
 
     protected function setUp(): void
     {

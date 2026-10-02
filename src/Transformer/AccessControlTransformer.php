@@ -2,8 +2,8 @@
 
 namespace Kematjaya\URLBundle\Transformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
 use Kematjaya\URLBundle\Source\RoutingSourceInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 
 /**
  * @package Kematjaya\URLBundle\Transformer
@@ -12,9 +12,7 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class AccessControlTransformer implements DataTransformerInterface
 {
-    public function __construct(private RoutingSourceInterface $routingSource)
-    {
-    }
+    public function __construct(private readonly RoutingSourceInterface $routingSource) {}
 
     public function reverseTransform(mixed $value): mixed
     {
@@ -53,9 +51,7 @@ class AccessControlTransformer implements DataTransformerInterface
                 continue;
             }
 
-            $routers[$route] = array_values(array_filter($routers[$route], function ($row) use ($role) {
-                return $row !== $role;
-            }));
+            $routers[$route] = array_values(array_filter($routers[$route], fn($row): bool => $row !== $role));
         }
 
         return $routers;

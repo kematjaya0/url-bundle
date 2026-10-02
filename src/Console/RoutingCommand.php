@@ -2,15 +2,15 @@
 
 namespace Kematjaya\URLBundle\Console;
 
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Kematjaya\URLBundle\Factory\RoutingFactoryInterface;
 use Kematjaya\URLBundle\Source\RoutingSourceInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * @package Kematjaya\URLBundle\Console
@@ -21,9 +21,9 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
 class RoutingCommand extends Command
 {
     public function __construct(
-        private RoutingSourceInterface $routingSource,
-        private RoutingFactoryInterface $routingFactory,
-        private RoleHierarchyInterface $roleHierarchy,
+        private readonly RoutingSourceInterface $routingSource,
+        private readonly RoutingFactoryInterface $routingFactory,
+        private readonly RoleHierarchyInterface $roleHierarchy,
         ?string $name = null
     ) {
         parent::__construct($name ?? 'url:configure');

@@ -5,6 +5,7 @@ namespace Kematjaya\URLBundle\Tests\Unit\Twig;
 use Kematjaya\URLBundle\Storage\CollectionCredentialStorage;
 use Kematjaya\URLBundle\Twig\DeleteExtension;
 use Kematjaya\URLBundle\Twig\UrlExtension;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -14,15 +15,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UrlExtensionTest extends TestCase
 {
-    /**
-     * @var CollectionCredentialStorage
-     */
-    private $storage;
+    private CollectionCredentialStorage $storage;
 
     /**
      * @var AuthorizationCheckerInterface
      */
-    private $authorizationChecker;
+    private MockObject $authorizationChecker;
 
     protected function setUp(): void
     {
@@ -33,9 +31,7 @@ class UrlExtensionTest extends TestCase
     private function createUrlGenerator(): UrlGeneratorInterface
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $urlGenerator->method('generate')->willReturnCallback(function (string $name, array $params = []) {
-            return '/' . $name . ($params ? '?' . http_build_query($params) : '');
-        });
+        $urlGenerator->method('generate')->willReturnCallback(fn(string $name, array $params = []): string => '/' . $name . ($params ? '?' . http_build_query($params) : ''));
 
         return $urlGenerator;
     }

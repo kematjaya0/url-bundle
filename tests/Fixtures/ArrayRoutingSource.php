@@ -9,15 +9,7 @@ use Kematjaya\URLBundle\Source\RoutingSourceInterface;
  */
 class ArrayRoutingSource implements RoutingSourceInterface
 {
-    /**
-     * @var array
-     */
-    public $routes;
-
-    public function __construct(array $routes = [])
-    {
-        $this->routes = $routes;
-    }
+    public function __construct(public array $routes = []) {}
 
     public function getPath(): string
     {

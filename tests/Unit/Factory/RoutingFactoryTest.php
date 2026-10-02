@@ -16,10 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RoutingFactoryTest extends TestCase
 {
-    /**
-     * @var TokenStorage
-     */
-    private $tokenStorage;
+    private TokenStorage $tokenStorage;
 
     protected function setUp(): void
     {

@@ -7,11 +7,11 @@
 namespace Kematjaya\URLBundle\Twig;
 
 use Kematjaya\URLBundle\Storage\CredentialStorageInterface;
-use Twig\TwigFunction;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\TwigFunction;
 
 /**
  * @package Kematjaya\URLBundle\Twig
@@ -21,8 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class DeleteExtension extends UrlExtension
 {
     public function __construct(
-        private TranslatorInterface $translator,
-        private CsrfTokenManagerInterface $tokenGenerator,
+        private readonly TranslatorInterface $translator,
+        private readonly CsrfTokenManagerInterface $tokenGenerator,
         AuthorizationCheckerInterface $security,
         UrlGeneratorInterface $urlGenerator,
         CredentialStorageInterface $credentialStorage
@@ -33,13 +33,13 @@ class DeleteExtension extends UrlExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('delete_tag', [$this, 'deleteTag'], ['is_safe' => ['html']])
+            new TwigFunction('delete_tag', $this->deleteTag(...), ['is_safe' => ['html']]),
         ];
     }
 
-    public function deleteTag(string $tokenId, string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = array(), array $extraContent = array(), bool $relative = false): ?string
+    public function deleteTag(string $tokenId, string $routeName, array $routeParameters = [], array $attributes = [], array $granteds = [], array $extraContent = [], bool $relative = false): ?string
     {
-        $attributes[self::KEY_LABEL] = isset($attributes[self::KEY_LABEL]) ? $attributes[self::KEY_LABEL] : 'delete';
+        $attributes[self::KEY_LABEL] ??= 'delete';
 
         if (!$this->getCredentialStorage()->getAccess($routeName)) {
 
